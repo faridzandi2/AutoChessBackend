@@ -1,0 +1,8 @@
+.unit-holder {
+    border: 1px solid gray;
+    border-radius: 5px;
+    margin-left: 3%;
+    margin-right: 3%;
+    margin-top: 50px !important;
+    height: 100px;
+}
