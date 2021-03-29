@@ -22,6 +22,7 @@ ethereumButton.addEventListener('click', () => {
             // get_token_balance();
 
             my_units_app.seen = true;
+            my_squads_app.seen = true;
             auction_app.seen = true;
         })
     })

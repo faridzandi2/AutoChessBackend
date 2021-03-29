@@ -12,39 +12,22 @@ var my_units_app = new Vue({
     el: "#my_units",
     data: {
         seen: false,
-        units: [
-            {
-                attack: 2,
-                curHealth: 10,
-                defence: 2,
-                level: 2,
-                maxHealth: 20,
-                name: "qwer",
-                utype: "archer",
-                image: "archer.png",
-                state: "Deployed"
-            }, {
-                attack: 2,
-                curHealth: 16,
-                defence: 2,
-                level: 2,
-                maxHealth: 18,
-                name: "mike",
-                utype: "cavalry",
-                image: "cavalry.png",
-                state: "Deployed"
-            }, {
-                attack: 2,
-                curHealth: 2,
-                defence: 2,
-                level: 2,
-                maxHealth: 20,
-                name: "fred",
-                utype: "warrior",
-                image: "warrior.png",
-                state: "Deployed"
-            },
-        ]
+        units: null
+    }
+})
+
+var my_squads_app = new Vue({
+    el: "#my_squads",
+    data: {
+        seen: false,
+        squads: [{
+            unitCount: 3,
+            stashedTokens: 10,
+            state: "asdf",
+            deployTime: "sdf",
+            totalAttack: "20",
+            units: null,
+        }]
     }
 })
 
@@ -63,3 +46,41 @@ var auction_app = new Vue({
         ]
     }
 })
+
+
+units_data_fake = [
+    {
+        attack: 2,
+        curHealth: 10,
+        defence: 2,
+        level: 2,
+        maxHealth: 20,
+        name: "qwer",
+        utype: "archer",
+        image: "archer.png",
+        state: "Deployed"
+    }, {
+        attack: 2,
+        curHealth: 16,
+        defence: 2,
+        level: 2,
+        maxHealth: 18,
+        name: "mike",
+        utype: "cavalry",
+        image: "cavalry.png",
+        state: "Deployed"
+    }, {
+        attack: 2,
+        curHealth: 2,
+        defence: 2,
+        level: 2,
+        maxHealth: 20,
+        name: "fred",
+        utype: "warrior",
+        image: "warrior.png",
+        state: "Deployed"
+    }
+]
+
+my_units_app.units = units_data_fake;
+my_squads_app.squads[0].units = units_data_fake;
