@@ -1,11 +1,31 @@
 {% verbatim %}
 <div class="row" style="margin-top: 50px">
     <div id="account_info" v-if="seen" class="col-12" style="padding-top: 6px;">
-        Address: {{ address }}
+        <div class="row">
+            <div class="col-12">
+                Address: {{ address }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                Ether Balance: {{ balance }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                Tokens: {{ tokens_balance }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <button class="btn btn-success" v-on:click="get_free_tokens()">Get Tokens!</button>
+                <button class="btn btn-success" v-on:click="purchase_with_ether()">Pay 1 Eth!</button>
+            </div>
+        </div>
+
         <br/>
-        Ether Balance: {{ balance }}
         <br/>
-        Tokens: {{ tokens_balance }}
+        <br/>
     </div>
 </div>
 {% endverbatim %}

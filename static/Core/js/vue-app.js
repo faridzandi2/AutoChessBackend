@@ -5,6 +5,23 @@ var account_info_app = new Vue({
         address: 'loading ...',
         balance: 'loading ...',
         tokens_balance: 'loading ...',
+    },
+    methods: {
+        get_free_tokens() {
+            token_faucet(function () {
+                get_token_balance().then(function (balance) {
+                    account_info_app.tokens_balance = ethers.utils.formatUnits(balance, 0);
+                });
+            })
+        },
+        purchase_with_ether() {
+            purchase_tokens("1", function () {
+                get_token_balance().then(function (balance) {
+                    account_info_app.tokens_balance = ethers.utils.formatUnits(balance, 0);
+                });
+                get_ether_balance();
+            })
+        }
     }
 });
 
@@ -12,7 +29,14 @@ var my_units_app = new Vue({
     el: "#my_units",
     data: {
         seen: false,
-        units: []
+        units: [],
+        selected: '0',
+        purchase_name: '',
+        options: [
+            {text: 'Archer', value: '0'},
+            {text: 'Warrior', value: '1'},
+            {text: 'Cavalry', value: '2'}
+        ]
     },
     methods: {
         _auction(unit_indices) {
@@ -21,6 +45,13 @@ var my_units_app = new Vue({
             start_auction(unit_indices, asking).then(function () {
 
             });
+        },
+        buy_unit() {
+            buy_unit(this.selected, this.purchase_name, function(){
+                update_unit_list();
+                update_token_balance();
+                update_ether_balance();
+            })
         },
         get_selected() {
             let selected_units = []
@@ -75,8 +106,8 @@ var my_auctions_app = new Vue({
         seen: false,
         auctions: []
     },
-    methods:{
-        get_col_count(num){
+    methods: {
+        get_col_count(num) {
             return Math.max(3, num)
         }
     }
@@ -160,7 +191,6 @@ squad2 = {
     units: [unit1, unit3, unit2, unit4],
 }
 
-my_units_app.units = [unit1, unit2, unit3];
 my_squads_app.squads = [squad1, squad2]
 
 let current = new Date()

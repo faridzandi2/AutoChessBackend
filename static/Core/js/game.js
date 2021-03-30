@@ -1,22 +1,44 @@
+async function get_provider_address() {
+    return await contract.ProviderAddress();
+}
+
+async function get_token_balance() {
+    return await store_token_contract.balanceOf(signer_address);
+}
+
+async function token_faucet(func) {
+    let tx = await store_token_contract.tokenFaucet();
+    tx.wait().then(function () {
+        func();
+    })
+}
+
+async function purchase_tokens(eths, func) {
+    let tx = await store_token_contract.purchaseTokens({value: ethers.utils.parseEther(eths)});
+    tx.wait().then(function () {
+        func();
+    })
+}
+
 async function get_my_units_count() {
     return await contract.balanceOf(signer_address);
 }
 
 async function get_my_units() {
-    let my_units = await contract.ownerToUnitIndex(signer_address);
-    let unit_infos = [];
+    let unit_count = await contract.ownerToUnitCount(signer_address);
 
-    for (let unit of my_units) {
-        let unit_info = await get_unit_info(unit);
+    let unit_infos = [];
+    for (let i = 0; i < unit_count; i++) {
+        let unit_index = await contract.ownerToUnitIndices(signer_address, i);
+        let unit_info = await get_unit_info(unit_index);
         unit_infos.push(unit_info);
     }
-
     return unit_infos;
 }
 
 
 async function get_my_squads() {
-    let my_squads = await contract.ownerToSquadIndex(signer_address);
+    let my_squads = await contract.ownerToSquadIndices(signer_address);
     let squad_infos = [];
 
     for (let squad of my_squads) {
@@ -76,7 +98,7 @@ async function get_unit_info(unit_index) {
     let m2 = ["Deployed", "Dead", "Auctioning", "Default", "Promised"]
 
     return {
-        index: unit_index,
+        index: unit_index.toNumber(),
         attack: unit.attack,
         curHealth: unit.curHealth,
         defence: unit.defence,
@@ -86,7 +108,7 @@ async function get_unit_info(unit_index) {
         utype: m[unit.utype],
         image: m[unit.utype] + ".png",
         state: m2[unit_state],
-        checked:false,
+        checked: false,
     };
 }
 
@@ -121,10 +143,10 @@ async function bid(auction_id, value) {
     })
 }
 
-async function buy_unit(type) {
-    let tx = await contract.buyUnit(type);
-    tx.wait().then(async () => {
-
+async function buy_unit(type, name, func) {
+    let tx = await contract._buyUnit(type, name);
+    tx.wait().then(() => {
+        func()
     })
 }
 

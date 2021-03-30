@@ -1,19 +1,13 @@
-
 {% verbatim %}
 
 <div v-if="seen" id="my_units">
-    <div class="row" style="margin-top: 50px">
+    <div class="row" style="margin-top: 10px">
         <div class="col-3">
             My Units:
         </div>
-        <div class="col-4">
-            <button class="btn btn-warning" v-on:click="auction_selected()">Auction Selected</button>
-        </div>
-        <div class="col-3">
-            <button class="btn btn-warning" v-on:click="squad_selected()">Make Squad</button>
-        </div>
     </div>
     <div class="row">
+
         <div style="margin-left: 20px" class="box col-2" v-for="unit in units">
             <div class="row">
                 <div class="col-8">
@@ -42,6 +36,39 @@
             <div class="row">
                 <div class="col-12">
                     <button class="btn btn-primary" v-on:click="auction(unit.index)">auction</button>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-left: 20px" class="box col-3">
+            <div class="row" style="margin-top:10px">
+                <div class="col-12">
+                    <button class="btn btn-warning" v-on:click="auction_selected()">Auction Selected</button>
+                </div>
+            </div>
+            <!-- div class="row" style="margin-top:10px">
+                <div class="col-12">
+                    <button class="btn btn-warning" v-on:click="squad_selected()">Make Squad</button>
+                </div>
+            </div !-->
+
+            <div class="row" style="margin-top:10px">
+                <div class="col-12">
+                    <input type="text" class="form-control" v-model="purchase_name" placeholder="name">
+                </div>
+            </div>
+            <div class="row" style="margin-top:10px">
+                <div class="col-12">
+                    <select class="form-select" v-model="selected">
+                        <option v-for="option in options" v-bind:value="option.value">
+                            {{ option.text }}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="row" style="margin-top:10px">
+                <div class="col-12">
+                    <button class="btn btn-warning" v-on:click="buy_unit()">Buy</button>
                 </div>
             </div>
         </div>
