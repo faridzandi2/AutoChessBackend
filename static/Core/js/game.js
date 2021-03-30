@@ -8,9 +8,7 @@ async function get_token_balance() {
 
 async function token_faucet(func) {
     let tx = await store_token_contract.tokenFaucet();
-    tx.wait().then(function () {
-        func();
-    })
+    tx.wait().then(func)
 }
 
 async function purchase_tokens(eths, func) {
