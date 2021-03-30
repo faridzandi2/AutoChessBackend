@@ -17,146 +17,27 @@
 </head>
 <body>
 
-{% verbatim %}
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a style="margin-left: 30px;" class="navbar-brand" href="#">Welcome to Autochess!</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
-            </li>
-        </ul>
-    </div>
-</nav>
+{% include 'navbar.html' %}
 
 <div class="row">
     <div class="col-lg-3"></div>
     <div class="col-lg-6 text-center">
         <div class="row" style="height: 100px;"></div>
-        <div class="row">
-            <div class="col-12">
-                <h1>
-                    Hello Anonymous User!
-                </h1>
-            </div>
-        </div>
 
+        {% include 'apps/base.html' %}
+        {% include 'apps/account_info.html' %}
+        {% include 'apps/my_units.html' %}
+        {% include 'apps/my_squads.html' %}
+        {% include 'apps/my_auctions.html' %}
 
-        <div class="row" style="margin-top: 50px">
-            <div class="col-12" style="padding-top: 6px;">
-                <button class="btn btn-primary enableEthereumButton">Connect!</button>
-            </div>
-        </div>
-
-        <div class="row" style="margin-top: 50px">
-            <div id="app" v-if="seen" class="col-12" style="padding-top: 6px;">
-                Address: {{ address }}
-                <br/>
-                Ether Balance: {{ balance }}
-                <br/>
-                Tokens: {{ tokens_balance }}
-            </div>
-        </div>
-
-        <div v-if="seen" id="my_units">
-            <div class="row" style="margin-top: 50px">
-                <div class="col-2">
-                    My Units:
-                </div>
-            </div>
-            <div class="row">
-                <div class="unit-holder col-2" v-for="unit in units">
-                    <div class="row">
-                        <div class="col-12">
-                            {{ unit.name }}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <img class="unit-type-img" v-bind:src="'/static/Core/images/' + unit.image + '?v=1'"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <progress id="file" v-bind:value="unit.curHealth" v-bind:max="unit.maxHealth"></progress>
-                    </div>
-                    <div class="row">
-                        <div class="col-3"><i class="fas fa-bahai"></i></div>
-                        <div class="col-3">{{ unit.attack }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-3"><i class="fas fa-shield-alt"></i></div>
-                        <div class="col-3">{{ unit.defence }}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div v-if="seen" id="my_squads">
-            <div class="row" style="margin-top: 50px">
-                <div class="col-2">
-                    My Squads:
-                </div>
-            </div>
-            <div class="row">
-                <div v-bind:class="'unit-holder col-' + squad.unitCount" v-for="squad in squads">
-                    <div class="row">
-                        <div class="col-3"><i class="fas fa-bahai"></i></div>
-                        <div class="col-3">{{ squad.totalAttack }}</div>
-                        <div class="col-3"><i class="fas fa-coins"></i></div>
-                        <div class="col-3">{{ squad.stashedTokens }}</div>
-                    </div>
-                    <div class="row">
-                        <div v-bind:class="'unit-holder col-' + 12/squad.unitCount" v-for="unit in squad.units">
-                            <div class="row">
-                                <div class="col-12">
-                                    {{ unit.name }}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <img class="unit-type-img"
-                                         v-bind:src="'/static/Core/images/' + unit.image + '?v=1'"/>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <progress id="file" v-bind:value="unit.curHealth"
-                                          v-bind:max="unit.maxHealth"></progress>
-                            </div>
-                            <div class="row">
-                                <div class="col-3"><i class="fas fa-bahai"></i></div>
-                                <div class="col-3">{{ unit.attack }}</div>
-                            </div>
-                            <div class="row">
-                                <div class="col-3"><i class="fas fa-shield-alt"></i></div>
-                                <div class="col-3">{{ unit.defence }}</div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-
-        <div v-if="seen" id="units-auction"></div>
     </div>
-</div>
 
-{% endverbatim %}
-<script src="{% static 'Core/contracts/HelloCoin.js' %}?v=1"></script>
-<script src="{% static 'Core/js/vue-app.js' %}?v=1"></script>
-<script src="{% static 'Core/js/core.js' %}?v=1"></script>
-<script src="{% static 'Core/js/game.js' %}?v=1"></script>
+
+    <script src="{% static 'Core/contracts/HelloCoin.js' %}?v=1"></script>
+    <script src="{% static 'Core/js/vue-app.js' %}?v=1"></script>
+    <script src="{% static 'Core/js/core.js' %}?v=1"></script>
+    <script src="{% static 'Core/js/game.js' %}?v=1"></script>
 </body>
 </html>
 

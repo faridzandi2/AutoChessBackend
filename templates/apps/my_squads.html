@@ -1,0 +1,52 @@
+{% verbatim %}
+
+<div v-if="seen" id="my_squads">
+    <div class="row" style="margin-top: 50px">
+        <div class="col-2">
+            My Squads:
+        </div>
+    </div>
+    <div class="row">
+        <div style="margin-left: 20px" v-bind:class="'box col-' + squad.unitCount" v-for="squad in squads">
+
+            <div class="row">
+                <div class="col-3"><i class="fas fa-bahai"></i></div>
+                <div class="col-3">{{ squad.totalAttack }}</div>
+                <div class="col-3"><i class="fas fa-coins"></i></div>
+                <div class="col-3">{{ squad.stashedTokens }}</div>
+            </div>
+            <div class="row">
+                <div v-bind:class="'box col-' + Math.floor(12/squad.unitCount)" v-for="unit in squad.units">
+                    <div class="row">
+                        <div class="col-12">
+                            {{ unit.name }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <img class="unit-type-img"
+                                 v-bind:src="'/static/Core/images/' + unit.image + '?v=1'"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <progress id="file" v-bind:value="unit.curHealth"
+                                  v-bind:max="unit.maxHealth"></progress>
+                    </div>
+                    <div class="row">
+                        <div class="col-3"><i class="fas fa-bahai"></i></div>
+                        <div class="col-3">{{ unit.attack }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3"><i class="fas fa-shield-alt"></i></div>
+                        <div class="col-3">{{ unit.defence }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12"> status : {{ squad.state }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endverbatim %}

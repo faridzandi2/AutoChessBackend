@@ -23,7 +23,7 @@ ethereumButton.addEventListener('click', () => {
 
             my_units_app.seen = true;
             my_squads_app.seen = true;
-            auction_app.seen = true;
+            my_auctions_app.seen = true;
         })
     })
 });

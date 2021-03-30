@@ -46,6 +46,7 @@ async function get_squad_info(squad_index) {
     let m = ["Retired", "TierOne", "TierTwo", "TierThree", "TierFour"]
 
     let squad_info = {
+        index: squad_index,
         unitCount: squad.unitCount,
         stashedTokens: squad.stashedTokens,
         state: m[squad.state],
@@ -75,6 +76,7 @@ async function get_unit_info(unit_index) {
     let m2 = ["Deployed", "Dead", "Auctioning", "Default", "Promised"]
 
     return {
+        index: unit_index,
         attack: unit.attack,
         curHealth: unit.curHealth,
         defence: unit.defence,
@@ -84,6 +86,7 @@ async function get_unit_info(unit_index) {
         utype: m[unit.utype],
         image: m[unit.utype] + ".png",
         state: m2[unit_state],
+        checked:false,
     };
 }
 
@@ -125,6 +128,12 @@ async function buy_unit(type) {
     })
 }
 
+async function make_squad(units) {
+    let tx = await contract.randomChallenge(units);
+    tx.wait().then(async () => {
+
+    })
+}
 
 async function random_challenge(units) {
     let tx = await contract.randomChallenge(units);

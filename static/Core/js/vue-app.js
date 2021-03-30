@@ -1,5 +1,5 @@
 var account_info_app = new Vue({
-    el: '#app',
+    el: '#account_info',
     data: {
         seen: false,
         address: 'loading ...',
@@ -12,7 +12,47 @@ var my_units_app = new Vue({
     el: "#my_units",
     data: {
         seen: false,
-        units: null
+        units: []
+    },
+    methods: {
+        _auction(unit_indices) {
+            let asking = parseInt(prompt("How much are you asking for?"))
+            alert("auctioning " + unit_indices + " for " + asking);
+            start_auction(unit_indices, asking).then(function () {
+
+            });
+        },
+        get_selected() {
+            let selected_units = []
+            for (let unit of this.units) {
+                if (unit.checked) {
+                    selected_units.push(unit.index);
+                }
+            }
+            return selected_units;
+        },
+        auction(unit_index) {
+            this._auction([unit_index]);
+        },
+        auction_selected() {
+            let selected = this.get_selected()
+            if (selected.length === 0) {
+                alert("Please select some units");
+                return;
+            }
+            this._auction(selected)
+        },
+        squad_selected() {
+            let selected = this.get_selected()
+            if (selected.length === 0) {
+                alert("Please select some units");
+                return;
+            }
+            make_squad(selected).then(function () {
+
+            })
+        }
+
     }
 })
 
@@ -20,67 +60,130 @@ var my_squads_app = new Vue({
     el: "#my_squads",
     data: {
         seen: false,
-        squads: [{
-            unitCount: 3,
-            stashedTokens: 10,
-            state: "asdf",
-            deployTime: "sdf",
-            totalAttack: "20",
-            units: null,
-        }]
+        squads: []
+    },
+    methods: {
+        withdraw_squad(squad_index) {
+
+        }
     }
 })
 
-var auction_app = new Vue({
-    el: '#units-auction',
+var my_auctions_app = new Vue({
+    el: '#my-auctions',
     data: {
         seen: false,
-        units: [
-            {text: "Unit", number: 1, class: 'col-1'},
-            {text: "Unit", number: 1, class: 'col-2'},
-            {text: "Unit", number: 1, class: 'col-3'},
-            {text: "Unit", number: 1, class: 'col-4'},
-            {text: "Unit", number: 1, class: 'col-5'},
-            {text: "Unit", number: 1, class: 'col-6'},
-            {text: "Unit", number: 1, class: 'col-7'},
-        ]
+        auctions: []
+    },
+    methods:{
+        get_col_count(num){
+            return Math.max(3, num)
+        }
     }
 })
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////                       /////////////////////////////
+////////////////////////////   insert dummy data   /////////////////////////////
+////////////////////////////                       /////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
-units_data_fake = [
-    {
-        attack: 2,
-        curHealth: 10,
-        defence: 2,
-        level: 2,
-        maxHealth: 20,
-        name: "qwer",
-        utype: "archer",
-        image: "archer.png",
-        state: "Deployed"
-    }, {
-        attack: 2,
-        curHealth: 16,
-        defence: 2,
-        level: 2,
-        maxHealth: 18,
-        name: "mike",
-        utype: "cavalry",
-        image: "cavalry.png",
-        state: "Deployed"
-    }, {
-        attack: 2,
-        curHealth: 2,
-        defence: 2,
-        level: 2,
-        maxHealth: 20,
-        name: "fred",
-        utype: "warrior",
-        image: "warrior.png",
-        state: "Deployed"
-    }
-]
+let unit1 = {
+    index: 1,
+    attack: 2,
+    curHealth: 10,
+    defence: 2,
+    level: 2,
+    maxHealth: 20,
+    name: "qwer",
+    utype: "archer",
+    image: "archer.png",
+    state: "Deployed",
+    checked: false,
+}
+let unit2 = {
+    index: 2,
+    attack: 2,
+    curHealth: 16,
+    defence: 2,
+    level: 2,
+    maxHealth: 18,
+    name: "mike",
+    utype: "cavalry",
+    image: "cavalry.png",
+    state: "Deployed",
+    checked: false,
+}
+let unit3 = {
+    index: 3,
+    attack: 2,
+    curHealth: 2,
+    defence: 2,
+    level: 2,
+    maxHealth: 20,
+    name: "fred",
+    utype: "warrior",
+    image: "warrior.png",
+    state: "Deployed",
+    checked: false,
+}
+let unit4 = {
+    index: 4,
+    attack: 2,
+    curHealth: 18,
+    defence: 2,
+    level: 2,
+    maxHealth: 20,
+    name: "fred",
+    utype: "warrior",
+    image: "warrior.png",
+    state: "Deployed",
+    checked: false,
+}
 
-my_units_app.units = units_data_fake;
-my_squads_app.squads[0].units = units_data_fake;
+squad1 = {
+    index: 1,
+    unitCount: 3,
+    stashedTokens: 10,
+    state: "asdf",
+    deployTime: "sdf",
+    totalAttack: "20",
+    units: [unit1, unit2, unit3],
+}
+squad2 = {
+    index: 2,
+    unitCount: 4,
+    stashedTokens: 10,
+    state: "asdf",
+    deployTime: "sdf",
+    totalAttack: "20",
+    units: [unit1, unit3, unit2, unit4],
+}
+
+my_units_app.units = [unit1, unit2, unit3];
+my_squads_app.squads = [squad1, squad2]
+
+let current = new Date()
+auction1 = {
+    highestBid: 0,
+    highestBidder: "someone",
+    host: "someone",
+    name: "jack",
+    assets: [unit1],
+    asset_count: 1,
+    highestBidText: "Default Bid",
+    endTime: current.getHours() + ":" + current.getMinutes(),
+}
+
+auction2 = {
+    highestBid: 0,
+    highestBidder: "someone",
+    host: "someone",
+    name: "jack",
+    assets: [unit1, unit2],
+    asset_count: 2,
+    highestBidText: "Default Bid",
+    endTime: current.getHours() + ":" + current.getMinutes(),
+}
+
+my_auctions_app.auctions = [auction1, auction2]
