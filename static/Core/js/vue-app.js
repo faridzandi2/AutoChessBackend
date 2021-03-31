@@ -9,17 +9,14 @@ var account_info_app = new Vue({
     methods: {
         get_free_tokens() {
             token_faucet(function () {
-                get_token_balance().then(function (balance) {
-                    account_info_app.tokens_balance = ethers.utils.formatUnits(balance, 0);
-                });
+                update_token_balance()
+                update_ether_balance();
             })
         },
         purchase_with_ether() {
             purchase_tokens("1", function () {
-                get_token_balance().then(function (balance) {
-                    account_info_app.tokens_balance = ethers.utils.formatUnits(balance, 0);
-                });
-                get_ether_balance();
+                update_token_balance()
+                update_ether_balance();
             })
         }
     }
@@ -42,12 +39,13 @@ var my_units_app = new Vue({
         _auction(unit_indices) {
             let asking = parseInt(prompt("How much are you asking for?"))
             alert("auctioning " + unit_indices + " for " + asking);
-            start_auction(unit_indices, asking).then(function () {
-
+            start_auction(unit_indices, asking, function () {
+                update_unit_list();
+                update_auction_list();
             });
         },
         buy_unit() {
-            buy_unit(this.selected, this.purchase_name, function(){
+            buy_unit(this.selected, this.purchase_name, function () {
                 update_unit_list();
                 update_token_balance();
                 update_ether_balance();
@@ -73,17 +71,6 @@ var my_units_app = new Vue({
             }
             this._auction(selected)
         },
-        squad_selected() {
-            let selected = this.get_selected()
-            if (selected.length === 0) {
-                alert("Please select some units");
-                return;
-            }
-            make_squad(selected).then(function () {
-
-            })
-        }
-
     }
 })
 
@@ -94,7 +81,36 @@ var my_squads_app = new Vue({
         squads: []
     },
     methods: {
+        get_element_width(count) {
+            return Math.round(9800 / count) / 98;
+        },
         withdraw_squad(squad_index) {
+
+        }
+    }
+})
+
+var deployed_squads_app = new Vue({
+    el: "#deployed_squads",
+    data: {
+        seen: false,
+        squads: []
+    },
+    methods: {
+        get_element_width(count) {
+            return Math.round(9800 / count) / 98;
+        },
+        challenge(squad_index) {
+            let selected = my_units_app.get_selected()
+            if (selected.length === 0) {
+                alert("Please select some units");
+                return;
+            }
+            targeted_challenge(selected, squad_index, () => {
+                update_my_squad_list()
+                update_deployed_squad_list()
+                update_unit_list()
+            });
 
         }
     }
@@ -107,8 +123,15 @@ var my_auctions_app = new Vue({
         auctions: []
     },
     methods: {
+        get_element_width(count) {
+            if (count === 1) {
+                return 50;
+            } else {
+                return Math.round(9800 / count) / 98;
+            }
+        },
         get_col_count(num) {
-            return Math.max(3, num)
+            return Math.max(2, num)
         }
     }
 })
@@ -191,7 +214,7 @@ squad2 = {
     units: [unit1, unit3, unit2, unit4],
 }
 
-my_squads_app.squads = [squad1, squad2]
+// my_squads_app.squads = [squad1, squad2]
 
 let current = new Date()
 auction1 = {
@@ -216,4 +239,4 @@ auction2 = {
     endTime: current.getHours() + ":" + current.getMinutes(),
 }
 
-my_auctions_app.auctions = [auction1, auction2]
+// my_auctions_app.auctions = [auction1, auction2]

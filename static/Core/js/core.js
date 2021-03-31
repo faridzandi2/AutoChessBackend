@@ -19,18 +19,19 @@ ethereumButton.addEventListener('click', () => {
             account_info_app.seen = true;
             my_units_app.seen = true;
             my_squads_app.seen = true;
+            deployed_squads_app.seen = true;
             my_auctions_app.seen = true;
 
 
             setup_contracts();
 
-            get_my_units().then((unit_infos) => {
-                my_units_app.units = unit_infos;
-            })
+            update_unit_list();
+            update_my_squad_list();
+            update_deployed_squad_list();
+            update_auction_list();
         })
     })
 });
-
 
 
 function sendEther() {
@@ -56,10 +57,33 @@ function update_token_balance() {
     });
 }
 
+
+function update_auction_list() {
+    get_all_auctions().then(function (infos){
+        my_auctions_app.auctions = infos;
+    })
+}
+
 function update_unit_list() {
-    get_my_units().then(function (unit_infos) {
+    get_my_units().then((unit_infos) => {
         my_units_app.units = unit_infos;
     })
+}
+
+function update_my_squad_list() {
+    get_my_squads().then((squad_lists) => {
+        get_squad_infos(squad_lists).then((infos) => {
+            my_squads_app.squads = infos;
+        });
+    });
+}
+
+function update_deployed_squad_list() {
+    get_squads_in_all_tiers().then((squad_lists) => {
+        get_squad_infos(squad_lists).then((infos) => {
+            deployed_squads_app.squads = infos;
+        });
+    });
 }
 
 function update_ether_balance() {

@@ -36,10 +36,24 @@ async function get_my_units() {
 
 
 async function get_my_squads() {
-    let my_squads = await contract.ownerToSquadIndices(signer_address);
+    let my_squad_count = await contract.ownerToSquadCount(signer_address);
+
+    let my_squads = [];
+    for (let i = 0; i < my_squad_count; i++) {
+        try {
+            let index = await contract.ownerToSquadIndex(signer_address, i);
+            console.log(index);
+            my_squads.push(index);
+        } catch (err) {
+        }
+    }
+    return await get_squad_infos(my_squads);
+}
+
+async function get_squad_infos(squad_indices) {
     let squad_infos = [];
 
-    for (let squad of my_squads) {
+    for (let squad of squad_indices) {
         let squad_info = await get_squad_info(squad);
         squad_infos.push(squad_info);
     }
@@ -73,7 +87,7 @@ async function get_squad_info(squad_index) {
         deployTime: squad.deployTime,
         totalAttack: squad.totalAttack,
     }
-    squad_info.units = get_squad_units_info(squad_index);
+    squad_info.units = await get_squad_units_info(squad_index);
     return squad_info;
 }
 
@@ -110,20 +124,51 @@ async function get_unit_info(unit_index) {
     };
 }
 
+async function get_squads_in_all_tiers() {
+    let result = []
+    for (let i = 0; i <= 4; i++) {
+        let squad_indices = await contract.getSquadIdsInTier(i);
+        let number_squad_indices = [];
+        for (let index of squad_indices) {
+            number_squad_indices.push(index.toNumber())
+        }
+        result = result.concat(number_squad_indices)
+    }
+    return result;
+}
 
 async function get_all_auctions() {
-    //
+    let infos = [];
+    let auction_count = await contract.get_auction_count()
+    for (let i = 0; i < auction_count; i++) {
+        let auction = await contract._auctions(i);
+        let assets = await contract.get_auction_assets(i);
+        let assets_info = []
+        for (let asset of assets){
+            assets_info.push(await get_unit_info(asset))
+        }
+        let info = {
+            highestBid: auction.highestBid.toNumber(),
+            highestBidder: auction.highestBidder,
+            host: auction.host,
+            name: "plchldr",
+            assets: assets_info,
+            asset_count: assets_info.length,
+            highestBidText: "Default Bid",
+            endTime: current.getHours() + ":" + current.getMinutes(),
+        }
+        infos.push(info);
+    }
+    return infos;
 }
 
 async function get_my_auctions() {
     //
 }
 
-async function start_auction(unit_indices, asking) {
+async function start_auction(unit_indices, asking,func) {
     let tx = await contract.startAuction(unit_indices, asking);
-    tx.wait().then(async () => {
-
-    })
+    tx.wait().then(func);
 }
 
 async function withdraw_auction(unit_indices, asking) {
@@ -142,7 +187,7 @@ async function bid(auction_id, value) {
 }
 
 async function buy_unit(type, name, func) {
-    let tx = await contract._buyUnit(type, name);
+    let tx = await contract["buyUnit(uint8,string)"](type, name);
     tx.wait().then(() => {
         func()
     })
@@ -163,11 +208,9 @@ async function random_challenge(units) {
 }
 
 
-async function targeted_challenge(units, target) {
+async function targeted_challenge(units, target, func) {
     let tx = await contract.targetedChallenge(units, target);
-    tx.wait().then(async () => {
-
-    })
+    tx.wait().then(func)
 }
 
 

@@ -16,7 +16,7 @@
                 <div class="col-3">{{ squad.stashedTokens }}</div>
             </div>
             <div class="row">
-                <div v-bind:class="'box col-' + Math.floor(12/squad.unitCount)" v-for="unit in squad.units">
+                <div v-bind:style="'width:' + get_element_width(squad.unitCount) +'%;'" class="box col" v-for="unit in squad.units">
                     <div class="row">
                         <div class="col-12">
                             {{ unit.name }}

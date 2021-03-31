@@ -21,25 +21,28 @@
 {% include 'navbar.html' %}
 
 <div class="row">
-    <div class="col-lg-3"></div>
-    <div class="col-lg-6 text-center">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8 text-center">
         <div class="row" style="height: 100px;"></div>
 
         {% include 'apps/base.html' %}
         {% include 'apps/account_info.html' %}
         {% include 'apps/my_units.html' %}
         {% include 'apps/my_squads.html' %}
+        {% include 'apps/deployed_squads.html' %}
         {% include 'apps/my_auctions.html' %}
 
     </div>
 
 
 {#    <script src="{% static 'Core/contracts/HelloCoin.js' %}?v=1"></script>#}
-    <script src="{% static 'Core/contracts/StoreToken.js' %}?v=1"></script>
-    <script src="{% static 'Core/contracts/AutoChess.js' %}?v=1"></script>
-    <script src="{% static 'Core/js/vue-app.js' %}?v=1"></script>
-    <script src="{% static 'Core/js/core.js' %}?v=1"></script>
-    <script src="{% static 'Core/js/game.js' %}?v=1"></script>
+    {% with version=3 %}
+        <script src="{% static 'Core/contracts/StoreToken.js' %}?v={{ version }}"></script>
+        <script src="{% static 'Core/contracts/AutoChess.js' %}?v={{ version }}"></script>
+        <script src="{% static 'Core/js/vue-app.js' %}?v={{ version }}"></script>
+        <script src="{% static 'Core/js/core.js' %}?v={{ version }}"></script>
+        <script src="{% static 'Core/js/game.js' %}?v={{ version }}"></script>
+    {% endwith %}
 </body>
 </html>
 

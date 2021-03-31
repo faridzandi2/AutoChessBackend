@@ -1,5 +1,10 @@
-const contract_address = "0x6c3F96494E808eBae87DEf0Ada5696DcB286B4a6"
+const contract_address = "0x3C346bA3bBEC6eE789A1EFABeAd5DE4ECDff337B"
 const contract_abi = [
+    {
+        "inputs": [],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
     {
         "anonymous": false,
         "inputs": [
@@ -31,6 +36,25 @@ const contract_abi = [
             {
                 "indexed": false,
                 "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_id",
+                "type": "uint256"
+            }
+        ],
+        "name": "SquadCreated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
                 "name": "from",
                 "type": "address"
             },
@@ -48,6 +72,25 @@ const contract_abi = [
             }
         ],
         "name": "Transfer",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            }
+        ],
+        "name": "UnitCreated",
         "type": "event"
     },
     {
@@ -118,30 +161,6 @@ const contract_abi = [
             }
         ],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "enum IAutoChessBase.UnitType",
-                "name": "_type",
-                "type": "uint8"
-            },
-            {
-                "internalType": "string",
-                "name": "_name",
-                "type": "string"
-            }
-        ],
-        "name": "_buyUnit",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "_unitId",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -297,6 +316,57 @@ const contract_abi = [
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_auctionId",
+                "type": "uint256"
+            }
+        ],
+        "name": "get_auction_assets",
+        "outputs": [
+            {
+                "internalType": "uint256[]",
+                "name": "assetIds",
+                "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "get_auction_count",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "count",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "squadIndex",
+                "type": "uint256"
+            }
+        ],
+        "name": "get_squad_units",
+        "outputs": [
+            {
+                "internalType": "uint256[]",
+                "name": "unitIds",
+                "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "name",
         "outputs": [
@@ -323,6 +393,49 @@ const contract_abi = [
                 "internalType": "address",
                 "name": "owner",
                 "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_addr",
+                "type": "address"
+            }
+        ],
+        "name": "ownerToSquadCount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "length",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "ownerToSquadIndex",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
             }
         ],
         "stateMutability": "view",
