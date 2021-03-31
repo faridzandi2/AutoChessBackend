@@ -44,6 +44,11 @@
                     </div>
                 </div>
             </div>
+            <div v-if="!is_mine(auction.host)">
+                <div class="col-12">
+                    <button class="btn btn-primary" v-on:click="bid(auction.index)">Bid!</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

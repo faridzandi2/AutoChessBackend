@@ -130,8 +130,17 @@ var my_auctions_app = new Vue({
                 return Math.round(9800 / count) / 98;
             }
         },
+        is_mine(addr) {
+            return addr === signer_address;
+        },
         get_col_count(num) {
             return Math.max(2, num)
+        },
+        bid(index) {
+            let my_bid = parseInt(prompt("How much are you asking for?"))
+            bid(index,my_bid,function (){
+                update_auction_list()
+            })
         }
     }
 })

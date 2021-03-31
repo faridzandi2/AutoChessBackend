@@ -148,6 +148,7 @@ async function get_all_auctions() {
             assets_info.push(await get_unit_info(asset))
         }
         let info = {
+            index:i,
             highestBid: auction.highestBid.toNumber(),
             highestBidder: auction.highestBidder,
             host: auction.host,
@@ -180,10 +181,8 @@ async function withdraw_auction(unit_indices, asking) {
 
 
 async function bid(auction_id, value) {
-    let tx = await contract.bid(auction_id, value);
-    tx.wait().then(async () => {
-
-    })
+    let tx = await contract["bid(uint256,uint256)"](auction_id, value);
+    tx.wait().then(func);
 }
 
 async function buy_unit(type, name, func) {
