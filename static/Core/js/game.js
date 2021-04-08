@@ -93,6 +93,11 @@ async function get_squad_info(squad_index) {
 
 async function get_squad_units_info(squad_index) {
     let units = await contract.get_squad_units(squad_index);
+    return get_units_info(units);
+}
+
+
+async function get_units_info(units) {
     let unit_infos = [];
 
     for (let unit of units) {
@@ -110,7 +115,7 @@ async function get_unit_info(unit_index) {
     let m2 = ["Deployed", "Dead", "Auctioning", "Default", "Promised"]
 
     return {
-        index: unit_index.toNumber(),
+        index: unit_index,
         attack: unit.attack,
         curHealth: unit.curHealth,
         defence: unit.defence,
@@ -144,11 +149,11 @@ async function get_all_auctions() {
         let auction = await contract._auctions(i);
         let assets = await contract.get_auction_assets(i);
         let assets_info = []
-        for (let asset of assets){
+        for (let asset of assets) {
             assets_info.push(await get_unit_info(asset))
         }
         let info = {
-            index:i,
+            index: i,
             highestBid: auction.highestBid.toNumber(),
             highestBidder: auction.highestBidder,
             host: auction.host,
@@ -157,6 +162,7 @@ async function get_all_auctions() {
             asset_count: assets_info.length,
             highestBidText: "Default Bid",
             endTime: current.getHours() + ":" + current.getMinutes(),
+            bid_textbox_model: parseInt(auction.highestBid) + 10
         }
         infos.push(info);
     }
@@ -167,7 +173,7 @@ async function get_my_auctions() {
     //
 }
 
-async function start_auction(unit_indices, asking,func) {
+async function start_auction(unit_indices, asking, func) {
     let tx = await contract.startAuction(unit_indices, asking);
     tx.wait().then(func);
 }
@@ -180,7 +186,7 @@ async function withdraw_auction(unit_indices, asking) {
 }
 
 
-async function bid(auction_id, value) {
+async function bid(auction_id, value, func) {
     let tx = await contract["bid(uint256,uint256)"](auction_id, value);
     tx.wait().then(func);
 }

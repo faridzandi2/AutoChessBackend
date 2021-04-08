@@ -1,0 +1,25 @@
+{% verbatim %}
+
+<div id="connect" v-if="seen" class="mdc-layout-grid">
+    <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+        <div class="mdc-card">
+            <div class="mdc-layout-grid">
+                <div class="mdc-layout-grid__inner">
+                    <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3-desktop"></div>
+                    <div class="text-center mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-6-desktop">
+                        Connect to your metamask wallet to start playing the game!
+                    </div>
+                </div>
+            </div>
+            <div class="mdc-layout-grid">
+                <div class="mdc-layout-grid__inner">
+                    <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4-desktop"></div>
+                    <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4-desktop">
+                        <button class="btn btn-primary enableEthereumButton" v-on:click="connect">Connect!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endverbatim %}

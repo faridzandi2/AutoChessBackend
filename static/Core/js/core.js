@@ -4,35 +4,30 @@ var contract;
 var store_token_contract;
 var provider;
 
-const ethereumButton = document.querySelector('.enableEthereumButton');
+function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
 
-ethereumButton.addEventListener('click', () => {
-    ethereum.request({method: 'eth_requestAccounts'}).then(function (account) {
-        provider = new ethers.providers.Web3Provider(ethereum)
-        signer = provider.getSigner()
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
 
-        signer.getAddress().then(function (address) {
-            signer_address = address
-            account_info_app.address = signer_address;
-
-
-            account_info_app.seen = true;
-            my_units_app.seen = true;
-            my_squads_app.seen = true;
-            deployed_squads_app.seen = true;
-            my_auctions_app.seen = true;
-
-
-            setup_contracts();
-
-            update_unit_list();
-            update_my_squad_list();
-            update_deployed_squad_list();
-            update_auction_list();
-        })
-    })
-});
-
+function eraseCookie(name) {
+    document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
 
 function sendEther() {
     const tx = signer.sendTransaction({
@@ -58,9 +53,9 @@ function update_token_balance() {
 }
 
 
-function update_auction_list() {
-    get_all_auctions().then(function (infos){
-        my_auctions_app.auctions = infos;
+function update_marketplace_app() {
+    get_all_auctions().then(function (infos) {
+        marketplace_app.my_auctions = infos;
     })
 }
 
@@ -71,6 +66,9 @@ function update_unit_list() {
 }
 
 function update_my_squad_list() {
+
+    update_undeployed_squad_list();
+
     get_my_squads().then((squad_lists) => {
         get_squad_infos(squad_lists).then((infos) => {
             my_squads_app.squads = infos;
@@ -78,10 +76,39 @@ function update_my_squad_list() {
     });
 }
 
-function update_deployed_squad_list() {
+function update_undeployed_squad_list() {
+    let my_squads_cookie = getCookie("my_squads");
+    if (my_squads_cookie) {
+        let data = JSON.parse(my_squads_cookie);
+        my_squads_app.undeployed_squads = [];
+
+        for (const prop in data) {
+            get_units_info(data[prop]).then((units) => {
+                let total_attack = 0;
+                console.log(units);
+                for (unit of units) {
+                    total_attack += unit.attack;
+                }
+                my_squads_app.undeployed_squads.push({
+                    name: prop,
+                    index: 0,
+                    unitCount: units.length,
+                    stashedTokens: 0,
+                    state: "stored",
+                    deployTime: 0,
+                    totalAttack: total_attack,
+                    units: units
+                })
+            });
+
+        }
+    }
+}
+
+function update_battles_app() {
     get_squads_in_all_tiers().then((squad_lists) => {
         get_squad_infos(squad_lists).then((infos) => {
-            deployed_squads_app.squads = infos;
+            battles_app.squads = infos;
         });
     });
 }

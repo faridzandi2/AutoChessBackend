@@ -1,0 +1,210 @@
+{% verbatim %}
+<div v-if="seen" id="marketplace">
+    <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+            <div class="mdc-card">
+                <div class="d-flex justify-content-between">
+                    <h2 class="card-title mb-0">Buy New Units</h2>
+                </div>
+                <div class="mdc-layout-grid">
+                    <div class="mdc-layout-grid__inner">
+
+                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-2">
+                            <div class="mdc-card" style="background-color:#e7d1ff;padding:10px;">
+                                <div class="row">
+                                    <div class="col"
+                                         style="width:90%;margin-right:5%;margin-left:5%;background-color: #aecefd;padding: 15%;border: 3px solid black;border-radius: 50%;">
+                                        <img style="width: 100%;" class="unit-type-img"
+                                             src="/static/Core/images/archer.png"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col col-12">
+                                        <button style="margin-top: 10px; width:100%" v-on:click="buy(0)"
+                                                class="btn btn-primary">Buy Archer (10)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-2">
+                            <div class="mdc-card" style="background-color:#e7d1ff;padding:10px;">
+                                <div class="row">
+                                    <div class="col"
+                                         style="width:90%;margin-right:5%;margin-left:5%;background-color: #aecefd;padding: 15%;border: 3px solid black;border-radius: 50%;">
+                                        <img style="width: 100%;" class="unit-type-img"
+                                             src="/static/Core/images/warrior.png"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col col-12">
+                                        <button style="margin-top: 10px; width:100%" v-on:click="buy(1)"
+                                                class="btn btn-primary">Buy Warrior (10)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-2">
+                            <div class="mdc-card" style="background-color:#e7d1ff;padding:10px;">
+                                <div class="row">
+                                    <div class="col"
+                                         style="width:90%;margin-right:5%;margin-left:5%;background-color: #aecefd;padding: 15%;border: 3px solid black;border-radius: 50%;">
+                                        <img style="width: 100%;" class="unit-type-img"
+                                             src="/static/Core/images/cavalry.png"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col col-12">
+                                        <button style="margin-top: 10px; width:100%" v-on:click="buy(2)"
+                                                class="btn btn-primary">Buy Warrior (15)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+            <div class="mdc-card">
+                <div class="d-flex justify-content-between">
+                    <h2 class="card-title mb-0">My Auctions</h2>
+                    <div>
+                        <div style="display: inline-block">
+                            <select v-on:change="sort_squads" class="form-select" v-model="sort_by">
+                                <option>sort by ...</option>
+                                <option>type</option>
+                                <option>name</option>
+                                <option>attack</option>
+                                <option>defence</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="mdc-layout-grid">
+                    <div class="mdc-layout-grid__inner">
+                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4"
+                             v-for="auction in my_auctions">
+                            <div class="mdc-card" style="background-color:#e7d1ff;padding:10px;">
+                                <div class="mdc-layout-grid">
+                                    <div class="mdc-layout-grid__inner">
+                                        <unit v-for="unit in auction.assets"
+                                              v-bind:width="6" v-bind:unit="unit"></unit>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        Highest bid
+                                    </div>
+                                    <div class="col-6" style="text-align:right">
+                                        {{auction.highestBid}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        Highest bidder
+                                    </div>
+                                    <div class="col-6" style="text-align:right">
+                                        {{auction.highestBidder.substr(0,20)}}...
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        Auction Ends:
+                                    </div>
+                                    <div class="col-6" style="text-align:right">
+                                        {{auction.endTime}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+            <div class="mdc-card">
+                <div class="d-flex justify-content-between">
+                    <h2 class="card-title mb-0">Available Auctions</h2>
+                    <div>
+                        <div style="display: inline-block">
+                            <select v-on:change="sort_squads" class="form-select" v-model="sort_by">
+                                <option>sort by ...</option>
+                                <option>type</option>
+                                <option>name</option>
+                                <option>attack</option>
+                                <option>defence</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="mdc-layout-grid">
+                    <div class="mdc-layout-grid__inner">
+                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4"
+                             v-for="auction in others_auctions">
+                            <div class="mdc-card" style="background-color:#e7d1ff;padding:10px;">
+                                <div class="mdc-layout-grid">
+                                    <div class="mdc-layout-grid__inner">
+                                        <unit v-for="unit in auction.assets"
+                                              v-bind:width="6" v-bind:unit="unit"></unit>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        Highest bid
+                                    </div>
+                                    <div class="col-6" style="text-align:right">
+                                        {{auction.highestBid}}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        Highest bidder
+                                    </div>
+                                    <div class="col-6" style="text-align:right">
+                                        {{auction.highestBidder.substr(0,20)}}...
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        Auction Ends:
+                                    </div>
+                                    <div class="col-6" style="text-align:right">
+                                        {{auction.endTime}}
+                                    </div>
+                                </div>
+
+                                <div class="mdc-layout-grid">
+                                    <div class="mdc-layout-grid__inner">
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-6">
+                                            <input style="width:100%" class="form-control" v-model="auction.bid_textbox_model"/>
+                                        </div>
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-6">
+                                            <button style="width:100%" v-on:click="bid(auction.bid_textbox_model, auction.index)"
+                                                    class="btn btn-primary">Bid!
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+{% endverbatim %}

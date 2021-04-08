@@ -1,31 +1,47 @@
 {% verbatim %}
-<div class="row" style="margin-top: 50px">
-    <div id="account_info" v-if="seen" class="col-12" style="padding-top: 6px;">
-        <div class="row">
-            <div class="col-12">
-                Address: {{ address }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                Ether Balance: {{ balance }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                Tokens: {{ tokens_balance }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <button class="btn btn-success" v-on:click="get_free_tokens()">Get Tokens!</button>
-                <button class="btn btn-success" v-on:click="purchase_with_ether()">Pay 1 Eth!</button>
-            </div>
-        </div>
+<div id="account_info" v-if="seen" class="mdc-layout-grid">
 
-        <br/>
-        <br/>
-        <br/>
+    <div class="mdc-layout-grid__inner">
+
+        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet">
+            <div class="mdc-card info-card info-card--info">
+                <div class="card-inner">
+                    <h5 class="card-title">Public Address</h5>
+                    <h5 class="font-weight-light pb-2 mb-1 border-bottom">{{ address }}</h5>
+                    <p class="tx-12 text-muted">Use this address to receive tokens from others!</p>
+                    <div class="card-icon-wrapper">
+                        <i class="fas fa-credit-card mdc-list-item__start-detail mdc-drawer-item-icon"
+                           aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet">
+            <div class="mdc-card info-card info-card--danger">
+                <div class="card-inner">
+                    <h5 class="card-title">Ether Balance </h5>
+                    <h5 class="font-weight-light pb-2 mb-1 border-bottom">{{ balance }}</h5>
+                    <p class="tx-12 text-muted">Current Ethereum Balance in your account</p>
+                    <div class="card-icon-wrapper">
+                        <i class="fas fa-dollar-sign mdc-list-item__start-detail mdc-drawer-item-icon"
+                           aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4-desktop mdc-layout-grid__cell--span-4-tablet">
+            <div class="mdc-card info-card info-card--primary">
+                <div class="card-inner">
+                    <h5 class="card-title">Token Balance</h5>
+                    <h5 class="font-weight-light pb-2 mb-1 border-bottom">{{ tokens_balance }}</h5>
+                    <p class="tx-12 text-muted">Number of tokens you currently own</p>
+                    <div class="card-icon-wrapper">
+                        <i class="fas fa-coins mdc-list-item__start-detail mdc-drawer-item-icon"
+                           aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endverbatim %}

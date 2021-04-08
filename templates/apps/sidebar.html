@@ -1,0 +1,56 @@
+{% verbatim %}
+<aside id="sidebar" class="mdc-drawer mdc-drawer--dismissible mdc-drawer--open">
+    <div class="mdc-drawer__header text-center" style="padding-top:20px">
+        <span style="color: white;font-size: 23px;">AutoChess</span>
+        <img src="/static/Core/images/knight.png"/>
+    </div>
+    <div class="mdc-drawer__content">
+
+        <div class="mdc-list-group">
+            <nav class="mdc-list mdc-drawer-menu">
+
+                <div class="mdc-list-item mdc-drawer-item">
+                    <a class="mdc-drawer-link" :class="connect_class" v-on:click="show_connect">
+                        <i class="fas fa-sync mdc-list-item__start-detail mdc-drawer-item-icon"
+                           aria-hidden="true"></i>
+                        Connect
+                    </a>
+                </div>
+                <div class="mdc-list-item mdc-drawer-item">
+                    <a class="mdc-drawer-link" :class="units_class" v-on:click="show_units">
+                        <i class="fas fa-user mdc-list-item__start-detail mdc-drawer-item-icon"
+                           aria-hidden="true"></i>
+                        My Units
+                    </a>
+                </div>
+                <div class="mdc-list-item mdc-drawer-item">
+                    <a class="mdc-drawer-link" :class="squads_class" v-on:click="show_squads">
+                        <i class="fas fa-users mdc-list-item__start-detail mdc-drawer-item-icon"
+                           aria-hidden="true"></i>
+                        My Squads
+                    </a>
+                </div>
+                <div class="mdc-list-item mdc-drawer-item">
+                    <a class="mdc-drawer-link" :class="battles_class" v-on:click="show_battles">
+                        <i class="fas fa-shield-alt mdc-list-item__start-detail mdc-drawer-item-icon"
+                           aria-hidden="true"></i>
+                        Battle!
+                    </a>
+                </div>
+                <div class="mdc-list-item mdc-drawer-item">
+                    <a class="mdc-drawer-link" :class="marketplace_class" v-on:click="show_marketplace">
+                        <i class="fas fa-balance-scale-right mdc-list-item__start-detail mdc-drawer-item-icon"
+                           aria-hidden="true"></i>
+                        Marketplace
+                    </a>
+                </div>
+            </nav>
+        </div>
+        <div class="profile-actions">
+            <a href="javascript:;">Settings</a>
+            <span class="divider"></span>
+            <a href="javascript:;">Logout</a>
+        </div>
+    </div>
+</aside>
+{% endverbatim %}

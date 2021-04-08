@@ -5,8 +5,11 @@ from django.views.generic import TemplateView
 
 
 class Dashboard(TemplateView):
-    template_name = 'base.html'
+    template_name = 'index.html'
 
 
 class Test(TemplateView):
-    template_name = 'base2.html'
+    template_name = 'index.html'
+
+class Test2(TemplateView):
+    template_name = 'index-copy.html'

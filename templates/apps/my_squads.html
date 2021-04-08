@@ -1,52 +1,222 @@
 {% verbatim %}
-
 <div v-if="seen" id="my_squads">
-    <div class="row" style="margin-top: 50px">
-        <div class="col-2">
-            My Squads:
-        </div>
-    </div>
-    <div class="row">
-        <div style="margin-left: 20px" v-bind:class="'box col-' + squad.unitCount" v-for="squad in squads">
+    <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+            <div class="mdc-card">
+                <div class="d-flex justify-content-between">
+                    <h2 class="card-title mb-0">Undeployed Squads:</h2>
+                    <div>
+                        <div style="display: inline-block">
+                            <select v-on:change="sort_units" class="form-select" v-model="undeployed_squads_sort_by">
+                                <option>sort by ...</option>
+                                <option>type</option>
+                                <option>name</option>
+                                <option>attack</option>
+                                <option>defence</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="mdc-layout-grid">
+                    <div class="mdc-layout-grid__inner">
+                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4"
+                             v-for="squad in undeployed_squads">
+                            <div class="mdc-card" style="background-color:#e7d1ff;padding:10px;">
 
-            <div class="row">
-                <div class="col-3"><i class="fas fa-bahai"></i></div>
-                <div class="col-3">{{ squad.totalAttack }}</div>
-                <div class="col-3"><i class="fas fa-coins"></i></div>
-                <div class="col-3">{{ squad.stashedTokens }}</div>
-            </div>
-            <div class="row">
-                <div v-bind:style="'width:' + get_element_width(squad.unitCount) +'%;'" class="box col" v-for="unit in squad.units">
-                    <div class="row">
-                        <div class="col-12">
-                            {{ unit.name }}
+                                <div class="mdc-layout-grid">
+                                    <div class="mdc-layout-grid__inner">
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12 text-center">
+
+                                            <div class="mdc-card">
+                                                <h3>
+                                                    {{ squad.name }}
+                                                </h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mdc-layout-grid">
+                                    <div class="mdc-layout-grid__inner">
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-2"></div>
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-2">
+                                            <i
+                                                    class="fas fa-bahai"></i></div>
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-2">
+                                            {{
+                                            squad.totalAttack }}
+                                        </div>
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-2">
+                                            <i
+                                                    class="fas fa-coins"></i></div>
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-2">
+                                            {{
+                                            squad.stashedTokens }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mdc-layout-grid">
+                                    <div class="mdc-layout-grid__inner">
+                                        <unit v-for="unit in squad.units"
+                                              v-bind:width="4" v-bind:unit="unit"></unit>
+                                    </div>
+                                </div>
+
+                                <div class="mdc-layout-grid">
+                                    <div class="mdc-layout-grid__inner">
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4">
+                                            <button style="width:100%" v-on:click="dissolve_squad(squad.name)"
+                                                    class="btn btn-warning">Dissolve Squad
+                                            </button>
+                                        </div>
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4">
+                                            <button style="width:100%" v-on:click="select_for_fight(squad.name)"
+                                                    class="btn btn-primary">Let's Fight!
+                                            </button>
+                                        </div>
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4">
+                                            <button style="width:100%" v-on:click="random_challenge(squad.name)"
+                                                    class="btn btn-primary">Random Challenge!
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <img class="unit-type-img"
-                                 v-bind:src="'/static/Core/images/' + unit.image + '?v=1'"/>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <progress id="file" v-bind:value="unit.curHealth"
-                                  v-bind:max="unit.maxHealth"></progress>
-                    </div>
-                    <div class="row">
-                        <div class="col-3"><i class="fas fa-bahai"></i></div>
-                        <div class="col-3">{{ unit.attack }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-3"><i class="fas fa-shield-alt"></i></div>
-                        <div class="col-3">{{ unit.defence }}</div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12"> status : {{ squad.state }}</div>
+        </div>
+    </div>
+
+    <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+            <div class="mdc-card">
+                <div class="d-flex justify-content-between">
+                    <h2 class="card-title mb-0">Deployed Squads:</h2>
+                    <div>
+                        <div style="display: inline-block">
+                            <select v-on:change="sort_units" class="form-select" v-model="deployed_squads_sort_by">
+                                <option>sort by ...</option>
+                                <option>type</option>
+                                <option>name</option>
+                                <option>attack</option>
+                                <option>defence</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="mdc-layout-grid">
+                    <div class="mdc-layout-grid__inner">
+                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4"
+                             v-for="squad in deployed_squads">
+                            <div class="mdc-card" style="background-color:#e7d1ff;padding:10px;">
+
+                                <div class="mdc-layout-grid">
+                                    <div class="mdc-layout-grid__inner">
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3">
+                                            <i
+                                                    class="fas fa-bahai"></i></div>
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3">
+                                            {{
+                                            squad.totalAttack }}
+                                        </div>
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3">
+                                            <i
+                                                    class="fas fa-coins"></i></div>
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3">
+                                            {{
+                                            squad.stashedTokens }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mdc-layout-grid">
+                                    <div class="mdc-layout-grid__inner">
+                                        <unit v-for="unit in squad.units"
+                                              v-bind:width="6" v-bind:unit="unit"></unit>
+                                    </div>
+                                </div>
+
+                                <div class="mdc-layout-grid">
+                                    <div class="mdc-layout-grid__inner">
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+                                            status : {{ squad.state }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <div class="mdc-layout-grid">
+        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+            <div class="mdc-card">
+                <div class="d-flex justify-content-between">
+                    <h2 class="card-title mb-0">Retired Squads:</h2>
+                    <div>
+                        <div style="display: inline-block">
+                            <select v-on:change="sort_units" class="form-select" v-model="deployed_squads_sort_by">
+                                <option>sort by ...</option>
+                                <option>type</option>
+                                <option>name</option>
+                                <option>attack</option>
+                                <option>defence</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="mdc-layout-grid">
+                    <div class="mdc-layout-grid__inner">
+                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4"
+                             v-for="squad in deployed_squads">
+                            <div class="mdc-card" style="background-color:#e7d1ff;padding:10px;">
+
+                                <div class="mdc-layout-grid">
+                                    <div class="mdc-layout-grid__inner">
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3">
+                                            <i
+                                                    class="fas fa-bahai"></i></div>
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3">
+                                            {{
+                                            squad.totalAttack }}
+                                        </div>
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3">
+                                            <i
+                                                    class="fas fa-coins"></i></div>
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-3">
+                                            {{
+                                            squad.stashedTokens }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mdc-layout-grid">
+                                    <div class="mdc-layout-grid__inner">
+                                        <unit v-for="unit in squad.units"
+                                              v-bind:width="6" v-bind:unit="unit"></unit>
+                                    </div>
+                                </div>
+
+                                <div class="mdc-layout-grid">
+                                    <div class="mdc-layout-grid__inner">
+                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
+                                            status : {{ squad.state }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 {% endverbatim %}
