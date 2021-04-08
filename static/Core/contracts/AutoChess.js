@@ -1,4 +1,4 @@
-const contract_address = "0x57275Ee69467D2b788297E8a3204a37bCd9A8Fd4"
+const contract_address = "0x140f4697e6597E6da4102831691Cd5cF959216a6"
 const contract_abi = [
     {
         "inputs": [],
@@ -214,13 +214,7 @@ const contract_abi = [
             }
         ],
         "name": "bid",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "success",
-                "type": "bool"
-            }
-        ],
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
@@ -243,20 +237,14 @@ const contract_abi = [
             }
         ],
         "name": "bid",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "success",
-                "type": "bool"
-            }
-        ],
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
         "inputs": [
             {
-                "internalType": "enum IAutoChessBase.UnitType",
+                "internalType": "enum UnitType",
                 "name": "_type",
                 "type": "uint8"
             }
@@ -265,7 +253,7 @@ const contract_abi = [
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "_unitId",
+                "name": "",
                 "type": "uint256"
             }
         ],
@@ -275,7 +263,7 @@ const contract_abi = [
     {
         "inputs": [
             {
-                "internalType": "enum IAutoChessBase.UnitType",
+                "internalType": "enum UnitType",
                 "name": "_type",
                 "type": "uint8"
             },
@@ -289,7 +277,7 @@ const contract_abi = [
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "_unitId",
+                "name": "",
                 "type": "uint256"
             }
         ],
@@ -299,7 +287,7 @@ const contract_abi = [
     {
         "inputs": [
             {
-                "internalType": "enum IAutoChessBase.DeploymentState",
+                "internalType": "enum DeploymentState",
                 "name": "_tier",
                 "type": "uint8"
             }
@@ -308,7 +296,7 @@ const contract_abi = [
         "outputs": [
             {
                 "internalType": "uint256[]",
-                "name": "deployed",
+                "name": "",
                 "type": "uint256[]"
             }
         ],
@@ -496,7 +484,7 @@ const contract_abi = [
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "winnings",
+                "name": "squadId",
                 "type": "uint256"
             }
         ],
@@ -543,18 +531,13 @@ const contract_abi = [
                 "type": "uint16"
             },
             {
-                "internalType": "enum IAutoChessBase.DeploymentState",
+                "internalType": "enum DeploymentState",
                 "name": "state",
                 "type": "uint8"
             },
             {
                 "internalType": "uint16",
                 "name": "deployTime",
-                "type": "uint16"
-            },
-            {
-                "internalType": "uint16",
-                "name": "totalAttack",
                 "type": "uint16"
             }
         ],
@@ -572,14 +555,19 @@ const contract_abi = [
                 "internalType": "uint256",
                 "name": "_asking",
                 "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "title",
+                "type": "string"
             }
         ],
         "name": "startAuction",
         "outputs": [
             {
-                "internalType": "bool",
-                "name": "success",
-                "type": "bool"
+                "internalType": "uint256",
+                "name": "auctionId",
+                "type": "uint256"
             }
         ],
         "stateMutability": "nonpayable",
@@ -626,7 +614,7 @@ const contract_abi = [
             },
             {
                 "internalType": "uint256",
-                "name": "_targetId",
+                "name": "targetId",
                 "type": "uint256"
             }
         ],
@@ -634,11 +622,30 @@ const contract_abi = [
         "outputs": [
             {
                 "internalType": "uint256",
-                "name": "winnings",
+                "name": "squadId",
                 "type": "uint256"
             }
         ],
         "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_owner",
+                "type": "address"
+            }
+        ],
+        "name": "tokensOfOwner",
+        "outputs": [
+            {
+                "internalType": "uint256[]",
+                "name": "tokenIds",
+                "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -763,7 +770,7 @@ const contract_abi = [
         "name": "unitIndexToState",
         "outputs": [
             {
-                "internalType": "enum IAutoChessBase.UnitState",
+                "internalType": "enum UnitState",
                 "name": "",
                 "type": "uint8"
             }
@@ -807,7 +814,7 @@ const contract_abi = [
                 "type": "uint16"
             },
             {
-                "internalType": "enum IAutoChessBase.UnitType",
+                "internalType": "enum UnitType",
                 "name": "utype",
                 "type": "uint8"
             },

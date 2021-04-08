@@ -33,8 +33,8 @@
             <div class="mdc-card info-card info-card--primary">
                 <div class="card-inner">
                     <h5 class="card-title">Token Balance</h5>
-                    <h5 class="font-weight-light pb-2 mb-1 border-bottom">{{ tokens_balance }}</h5>
-                    <p class="tx-12 text-muted">Number of tokens you currently own</p>
+                    <h5 class="font-weight-light pb-2 mb-1 border-bottom">{{ tokens_balance }}</h5>         <button class="btn btn-success" v-on:click="get_free_tokens()">Get Tokens!</button>
+        <button class="btn btn-success" v-on:click="purchase_with_ether()">Pay 1 Eth!</button>
                     <div class="card-icon-wrapper">
                         <i class="fas fa-coins mdc-list-item__start-detail mdc-drawer-item-icon"
                            aria-hidden="true"></i>

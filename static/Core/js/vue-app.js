@@ -199,8 +199,8 @@ var my_units_app = new Vue({
         },
         _auction(unit_indices) {
             let asking = parseInt(prompt("How much are you asking for?"))
-            alert("auctioning " + unit_indices + " for " + asking);
-            start_auction(unit_indices, asking, function () {
+            let title = parseInt(prompt("Auction title?"))
+            start_auction(unit_indices, asking, title, function () {
                 update_unit_list();
                 update_marketplace_app();
             });

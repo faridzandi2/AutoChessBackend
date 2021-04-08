@@ -173,8 +173,8 @@ async function get_my_auctions() {
     //
 }
 
-async function start_auction(unit_indices, asking, func) {
-    let tx = await contract.startAuction(unit_indices, asking);
+async function start_auction(unit_indices, asking, title, func) {
+    let tx = await contract.startAuction(unit_indices, asking, title);
     tx.wait().then(func);
 }
 
