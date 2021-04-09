@@ -55,7 +55,15 @@ function update_token_balance() {
 
 function update_marketplace_app() {
     get_all_auctions().then(function (infos) {
-        marketplace_app.my_auctions = infos;
+        marketplace_app.my_auctions = []
+        marketplace_app.others_actions = []
+        for(let a of infos){
+            if(a.host === signer_address){
+                marketplace_app.my_auctions.push(s)
+            } else {
+                marketplace_app.others_actions.push(s)
+            }
+        }
     })
 }
 
@@ -69,10 +77,16 @@ function update_my_squad_list() {
 
     update_undeployed_squad_list();
 
-    get_my_squads().then((squad_lists) => {
-        get_squad_infos(squad_lists).then((infos) => {
-            my_squads_app.squads = infos;
-        });
+    get_my_squads().then((squads) => {
+        my_squads_app.retired_squads = []
+        my_squads_app.deployed_squads = []
+        for(let s of squads){
+            if(s.state === "Retired"){
+                my_squads_app.retired_squads.push(s)
+            } else {
+                my_squads_app.deployed_squads.push(s)
+            }
+        }
     });
 }
 
@@ -85,7 +99,6 @@ function update_undeployed_squad_list() {
         for (const prop in data) {
             get_units_info(data[prop]).then((units) => {
                 let total_attack = 0;
-                console.log(units);
                 for (unit of units) {
                     total_attack += unit.attack;
                 }
@@ -106,10 +119,14 @@ function update_undeployed_squad_list() {
 }
 
 function update_battles_app() {
-    get_squads_in_all_tiers().then((squad_lists) => {
-        get_squad_infos(squad_lists).then((infos) => {
-            battles_app.squads = infos;
-        });
+    let tier = get_tier(select_for_fight_app.selected_units);
+
+    if (tier === -1) {
+        battles_app.message = "select some units. "
+        return;
+    }
+    get_squads_in_tier(tier).then((squad_lists) => {
+        battles_app.squads = squad_lists;
     });
 }
 
@@ -131,3 +148,50 @@ function setup_store_token_contract() {
     ).connect(signer);
 }
 
+function to_number(list) {
+    let result = [];
+    for (let i of list) {
+        result.push(i.toNumber())
+    }
+    return result;
+}
+
+function get_tier(units) {
+
+    let unitCount = units.length;
+
+    if (unitCount === 1) {
+        return 2;
+    } else if (unitCount === 3) {
+        return 3;
+    } else if (unitCount === 5) {
+        return 4;
+    } else if (unitCount === 7) {
+        return 5;
+    }
+
+    return -1;
+}
+
+
+function general_sort(array, criteria) {
+    function compare(a, b) {
+        if (criteria === "Attack") {
+            return a.attack - b.attack;
+        } else if (criteria === "Defence") {
+            return a.defence - b.defence;
+        } else if (criteria === "Total Attack") {
+            return a.defence - b.defence;
+        } else if (criteria === "Stashed Tokens") {
+            return a.stashedTokens - b.stashedTokens;
+        } else if (criteria === "Unit Count") {
+            return a.unitCount - b.unitCount;
+        } else if (criteria === "Name") {
+            return a.name.localeCompare(b.name);
+        } else if (criteria === "Type") {
+            return a.utype.localeCompare(b.utype);
+        }
+    }
+
+    return array.sort(compare);
+}

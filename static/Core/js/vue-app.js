@@ -1,8 +1,8 @@
 Vue.component('unit', {
     props: {
-        width: Number,
+        width: String,
         unit: Object,
-        show_checkbox: {
+        show_detail: {
             type: Boolean,
             default: false,
         }
@@ -10,7 +10,7 @@ Vue.component('unit', {
     template: '' +
         '<div v-bind:class="\'mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-\' + width">' +
         '  <div class="mdc-card" style="background-color:#cda3fb; padding:10px;">' +
-        '     <input v-if="show_checkbox" style="position:absolute; transform: scale(2);" type="checkbox" v-model="unit.checked"/>\n' +
+        '     <input v-if="show_detail" style="position:absolute; transform: scale(2);" type="checkbox" v-model="unit.checked"/>\n' +
         '    <div class="row">\n' +
         '        <div class="col-12 text-center">\n' +
         '            <h4>{{ unit.name }}</h4>\n' +
@@ -23,15 +23,22 @@ Vue.component('unit', {
         '        </div>\n' +
         '    </div>\n' +
         '    <div class="row">\n' +
-        '        <progress id="file" v-bind:value="unit.curHealth"\n' +
-        '                  v-bind:max="unit.maxHealth"></progress>\n' +
-        '    </div>\n' +
-        '    <div class="row">\n' +
-        '        <div class="col col-1"><i class="fas fa-bahai"></i></div>\n' +
-        '        <div class="col col-1">{{ unit.attack }}</div>\n' +
-        '        <div class="col col-1"><i class="fas fa-shield-alt"></i></div>\n' +
-        '        <div class="col col-1">{{ unit.defence }}</div>\n' +
+        '        <div class="col col-6 text-right"><i class="fas fa-bahai"></i></div>\n' +
+        '        <div class="col col-6 text-left ">{{ unit.attack }}</div>\n' +
+        '        <div class="col col-6 text-right"><i class="fas fa-shield-alt"></i></div>\n' +
+        '        <div class="col col-6 text-left">{{ unit.defence }}</div>\n' +
+        '        <div class="col col-6 text-right"><i class="fas fa-heart"></i></div>\n' +
+        '        <div class="col col-6 text-left">{{ unit.curHealth }}</div>\n' +
         '    </div>' +
+        '     <div v-if="show_detail" class="row">\n' +
+        '           <div class="col col-12 text-center">\n' +
+        '               <div class="mdc-card" style="padding:5px; background-color:gray" >\n' +
+        '                   <h5>\n' +
+        '                       {{ unit.state }}\n' +
+        '                   </h5>\n' +
+        '               </div>\n' +
+        '       </div>\n' +
+        '   </div>' +
         '  </div>' +
         '</div>'
 })
@@ -93,6 +100,7 @@ var sidebar_app = new Vue({
             my_squads_app.seen = false;
             battles_app.seen = true;
             marketplace_app.seen = false;
+            update_battles_app();
 
         },
         show_marketplace() {
@@ -108,6 +116,17 @@ var sidebar_app = new Vue({
             marketplace_app.seen = true;
 
         }
+    }
+});
+
+
+var select_for_fight_app = new Vue({
+    el: '#select_for_fight',
+    data: {
+        selected_units: [],
+        selected_name: "N/A"
+    },
+    methods: {
     }
 });
 
@@ -157,7 +176,6 @@ var connect_app = new Vue({
                     setup_contracts();
                     update_unit_list();
                     update_my_squad_list();
-                    update_battles_app();
                     update_marketplace_app();
                 })
             })
@@ -181,21 +199,7 @@ var my_units_app = new Vue({
     },
     methods: {
         sort_units() {
-            let sorting = this.sort_by;
-
-            function compare(a, b) {
-                if (sorting === "attack") {
-                    return a.attack - b.attack;
-                } else if (sorting === "defence") {
-                    return a.defence - b.defence;
-                } else if (sorting === "name") {
-                    return a.name.localeCompare(b.name);
-                } else if (sorting === "type") {
-                    return a.utype.localeCompare(b.utype);
-                }
-            }
-
-            this.units = this.units.sort(compare);
+            this.units = general_sort(this.units, this.sort_by)
         },
         _auction(unit_indices) {
             let asking = parseInt(prompt("How much are you asking for?"))
@@ -252,8 +256,6 @@ var my_units_app = new Vue({
     }
 })
 
-var selected_units_for_fight = null;
-
 var my_squads_app = new Vue({
     el: "#my_squads",
     data: {
@@ -267,9 +269,6 @@ var my_squads_app = new Vue({
         retired_squads: []
     },
     methods: {
-        get_element_width(count) {
-            return Math.round(9800 / count) / 98;
-        },
         dissolve_squad(squad_name) {
             let my_squad_cookie = getCookie("my_squads");
             if (!my_squad_cookie) {
@@ -286,13 +285,23 @@ var my_squads_app = new Vue({
                 my_squad_cookie = "{}"
             }
             let data = JSON.parse(my_squad_cookie);
-            let unit_indices = data[squad_name];
-            alert(unit_indices + " was selected for fight. Select a deployed squad to challenge!");
+
+            select_for_fight_app.selected_units = data[squad_name];
+            select_for_fight_app.selected_name = squad_name;
+
+            sidebar_app.show_battles();
         },
         random_challenge(squad_name) {
 
         },
-        sort_units(array_name) {
+        sort_undeployed_squads(array_name) {
+            this.undeployed_squads = general_sort(this.undeployed_squads, this.undeployed_squads_sort_by)
+        },
+        sort_deployed_squads(array_name) {
+            this.deployed_squads = general_sort(this.deployed_squads, this.deployed_squads_sort_by)
+        },
+        sort_retired_squads(array_name) {
+            this.retired_squads = general_sort(this.retired_squads, this.retired_squads_sort_by)
         }
     }
 })
@@ -304,16 +313,14 @@ var battles_app = new Vue({
         squads: []
     },
     methods: {
-        get_element_width(count) {
-            return Math.round(9800 / count) / 98;
-        },
-        challenge(squad_index) {
-            let selected = my_units_app.get_selected()
+        challenge(tier_index) {
+            let selected = select_for_fight_app.selected_units;
             if (selected.length === 0) {
                 alert("Please select some units");
                 return;
             }
-            targeted_challenge(selected, squad_index, () => {
+            targeted_challenge(selected, tier_index, () => {
+                my_squads_app.dissolve_squad(select_for_fight_app.selected_name)
                 update_my_squad_list()
                 update_unit_list()
                 update_battles_app()

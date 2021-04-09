@@ -7,12 +7,11 @@
                     <h2 class="card-title mb-0">Undeployed Squads:</h2>
                     <div>
                         <div style="display: inline-block">
-                            <select v-on:change="sort_units" class="form-select" v-model="undeployed_squads_sort_by">
+                            <select v-on:change="sort_undeployed_squads" class="form-select"
+                                    v-model="undeployed_squads_sort_by">
                                 <option>sort by ...</option>
-                                <option>type</option>
-                                <option>name</option>
-                                <option>attack</option>
-                                <option>defence</option>
+                                <option>Total Attack</option>
+                                <option>Unit Count</option>
                             </select>
                         </div>
                     </div>
@@ -59,7 +58,7 @@
                                 <div class="mdc-layout-grid">
                                     <div class="mdc-layout-grid__inner">
                                         <unit v-for="unit in squad.units"
-                                              v-bind:width="4" v-bind:unit="unit"></unit>
+                                              width="4" v-bind:unit="unit"></unit>
                                     </div>
                                 </div>
 
@@ -97,12 +96,12 @@
                     <h2 class="card-title mb-0">Deployed Squads:</h2>
                     <div>
                         <div style="display: inline-block">
-                            <select v-on:change="sort_units" class="form-select" v-model="deployed_squads_sort_by">
+                            <select v-on:change="sort_deployed_squads" class="form-select"
+                                    v-model="deployed_squads_sort_by">
                                 <option>sort by ...</option>
-                                <option>type</option>
-                                <option>name</option>
-                                <option>attack</option>
-                                <option>defence</option>
+                                <option>Total Attack</option>
+                                <option>Unit Count</option>
+                                <option>Stashed Tokens</option>
                             </select>
                         </div>
                     </div>
@@ -135,7 +134,7 @@
                                 <div class="mdc-layout-grid">
                                     <div class="mdc-layout-grid__inner">
                                         <unit v-for="unit in squad.units"
-                                              v-bind:width="6" v-bind:unit="unit"></unit>
+                                              width="4" v-bind:unit="unit"></unit>
                                     </div>
                                 </div>
 
@@ -160,12 +159,12 @@
                     <h2 class="card-title mb-0">Retired Squads:</h2>
                     <div>
                         <div style="display: inline-block">
-                            <select v-on:change="sort_units" class="form-select" v-model="deployed_squads_sort_by">
+                            <select v-on:change="sort_retired_squads" class="form-select"
+                                    v-model="retired_squads_sort_by">
                                 <option>sort by ...</option>
-                                <option>type</option>
-                                <option>name</option>
-                                <option>attack</option>
-                                <option>defence</option>
+                                <option>Total Attack</option>
+                                <option>Unit Count</option>
+                                <option>Stashed Tokens</option>
                             </select>
                         </div>
                     </div>
@@ -173,7 +172,7 @@
                 <div class="mdc-layout-grid">
                     <div class="mdc-layout-grid__inner">
                         <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-4"
-                             v-for="squad in deployed_squads">
+                             v-for="squad in retired_squads">
                             <div class="mdc-card" style="background-color:#e7d1ff;padding:10px;">
 
                                 <div class="mdc-layout-grid">
@@ -198,17 +197,11 @@
                                 <div class="mdc-layout-grid">
                                     <div class="mdc-layout-grid__inner">
                                         <unit v-for="unit in squad.units"
-                                              v-bind:width="6" v-bind:unit="unit"></unit>
+                                              width="4" v-bind:unit="unit"></unit>
                                     </div>
                                 </div>
 
-                                <div class="mdc-layout-grid">
-                                    <div class="mdc-layout-grid__inner">
-                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
-                                            status : {{ squad.state }}
-                                        </div>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                     </div>

@@ -18,39 +18,61 @@ async function purchase_tokens(eths, func) {
     })
 }
 
-async function get_my_units_count() {
-    return await contract.balanceOf(signer_address);
+async function get_unit_info(unit_index) {
+    let unit = await contract.getToken(unit_index);
+    let unit_state = await contract.getUnitState(unit_index);
+    let m = ["archer", "warrior", "cavalry"]
+    let m2 = ["Dead","Deployed","Auctioning","Default","Promised"]
+
+    return {
+        index: unit_index,
+        name: unit.name,
+        defence: unit.defence,
+        attack: unit.power,
+        curHealth: unit.health,
+        level: unit.level,
+        maxHealth: 100, // TODO: fix this!
+        utype: m[unit.utype],
+        image: m[unit.utype] + ".png",
+        state: m2[unit_state],
+        checked: false,
+    };
 }
 
-async function get_my_units() {
-    let unit_count = await contract.ownerToUnitCount(signer_address);
-
+async function get_units_info(unit_indices) {
     let unit_infos = [];
-    for (let i = 0; i < unit_count; i++) {
-        let unit_index = await contract.ownerToUnitIndices(signer_address, i);
-        let unit_info = await get_unit_info(unit_index);
+
+    for (let unit of unit_indices) {
+        let unit_info = await get_unit_info(unit);
         unit_infos.push(unit_info);
     }
+
     return unit_infos;
 }
 
 
-async function get_my_squads() {
-    let my_squad_count = await contract.ownerToSquadCount(signer_address);
+async function get_squad_info(squad_index) {
+    let squad = await contract.getSquad(squad_index);
+    let m = ["Unused","Retired","TierOne","TierTwo","TierThree","TierFour"]
+    let unit_infos = await get_units_info(squad.unitIds);
 
-    let my_squads = [];
-    for (let i = 0; i < my_squad_count; i++) {
-        try {
-            let index = await contract.ownerToSquadIndex(signer_address, i);
-            console.log(index);
-            my_squads.push(index);
-        } catch (err) {
-        }
+    let total_attack = 0;
+    for(let i of unit_infos){
+        total_attack += i.attack;
     }
-    return await get_squad_infos(my_squads);
+
+    return {
+        index: squad_index,
+        unitCount: unit_infos.length,
+        stashedTokens: squad.stashedTokens,
+        state: m[1], // TODO: fix this
+        deployTime: squad.deployTime,
+        totalAttack: total_attack,
+        units: unit_infos,
+    };
 }
 
-async function get_squad_infos(squad_indices) {
+async function get_squads_info(squad_indices) {
     let squad_infos = [];
 
     for (let squad of squad_indices) {
@@ -61,93 +83,47 @@ async function get_squad_infos(squad_indices) {
     return squad_infos;
 }
 
+async function get_my_units() {
+    let unitIds = await contract.tokensOfOwner(signer_address);
+    return await get_units_info(unitIds);
+}
 
-async function get_squads_in_tier() {
-    let tier_squads = await contract.getSquadIdsInTier(signer_address);
-    let squad_infos = [];
+async function get_my_units_count() {
+    return await contract.balanceOf(signer_address);
+}
 
-    for (let squad of tier_squads) {
-        let squad_info = await get_squad_info(squad);
-        squad_infos.push(squad_info);
+async function get_my_squads() {
+    let squadIds = await contract.squadsOf(signer_address);
+    return await get_squads_info(to_number(squadIds));
+}
+
+
+async function get_squads_in_tier(tier) {
+    let squadIds = await contract.getSquadIdsInTier(tier);
+    let squad_infos = await get_squads_info(to_number(squadIds));
+    for (let i = 0; i < squad_infos.length; i++){
+        squad_infos[i].tier_index = i;
     }
-
     return squad_infos;
 }
 
 
-async function get_squad_info(squad_index) {
-    let squad = await contract.squads(squad_index);
-    let m = ["Retired", "TierOne", "TierTwo", "TierThree", "TierFour"]
-
-    let squad_info = {
-        index: squad_index,
-        unitCount: squad.unitCount,
-        stashedTokens: squad.stashedTokens,
-        state: m[squad.state],
-        deployTime: squad.deployTime,
-        totalAttack: squad.totalAttack,
-    }
-    squad_info.units = await get_squad_units_info(squad_index);
-    return squad_info;
+async function targeted_challenge(units, target, func) {
+    let tx = await contract.targetedChallenge(units, target);
+    tx.wait().then(func)
 }
 
-async function get_squad_units_info(squad_index) {
-    let units = await contract.get_squad_units(squad_index);
-    return get_units_info(units);
-}
-
-
-async function get_units_info(units) {
-    let unit_infos = [];
-
-    for (let unit of units) {
-        let unit_info = await get_unit_info(unit);
-        unit_infos.push(unit_info);
-    }
-
-    return unit_infos;
-}
-
-async function get_unit_info(unit_index) {
-    let unit = await contract.units(unit_index);
-    let unit_state = await contract.unitIndexToState(unit_index);
-    let m = ["archer", "warrior", "cavalry"]
-    let m2 = ["Deployed", "Dead", "Auctioning", "Default", "Promised"]
-
-    return {
-        index: unit_index,
-        attack: unit.attack,
-        curHealth: unit.curHealth,
-        defence: unit.defence,
-        level: unit.level,
-        maxHealth: unit.maxHealth,
-        name: unit.name,
-        utype: m[unit.utype],
-        image: m[unit.utype] + ".png",
-        state: m2[unit_state],
-        checked: false,
-    };
-}
-
-async function get_squads_in_all_tiers() {
-    let result = []
-    for (let i = 0; i <= 4; i++) {
-        let squad_indices = await contract.getSquadIdsInTier(i);
-        let number_squad_indices = [];
-        for (let index of squad_indices) {
-            number_squad_indices.push(index.toNumber())
-        }
-        result = result.concat(number_squad_indices)
-    }
-    return result;
+async function random_challenge(units, func) {
+    let tx = await contract.randomChallenge(units);
+    tx.wait().then(func)
 }
 
 async function get_all_auctions() {
     let infos = [];
-    let auction_count = await contract.get_auction_count()
+    let auction_count = await contract.getAuctionCount()
     for (let i = 0; i < auction_count; i++) {
         let auction = await contract._auctions(i);
-        let assets = await contract.get_auction_assets(i);
+        let assets = await contract.getAssetIds(i);
         let assets_info = []
         for (let asset of assets) {
             assets_info.push(await get_unit_info(asset))
@@ -167,10 +143,6 @@ async function get_all_auctions() {
         infos.push(info);
     }
     return infos;
-}
-
-async function get_my_auctions() {
-    //
 }
 
 async function start_auction(unit_indices, asking, title, func) {
@@ -198,25 +170,9 @@ async function buy_unit(type, name, func) {
     })
 }
 
-async function make_squad(units) {
-    let tx = await contract.randomChallenge(units);
-    tx.wait().then(async () => {
-
-    })
-}
-
-async function random_challenge(units) {
-    let tx = await contract.randomChallenge(units);
-    tx.wait().then(async () => {
-
-    })
-}
 
 
-async function targeted_challenge(units, target, func) {
-    let tx = await contract.targetedChallenge(units, target);
-    tx.wait().then(func)
-}
+
 
 
 

@@ -1,3 +1,4 @@
+{% verbatim %}
 <header class="mdc-top-app-bar">
     <div class="mdc-top-app-bar__row">
         <div class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
@@ -7,11 +8,12 @@
             <span class="mdc-top-app-bar__title">Hello Anonymous User!</span>
         </div>
         <div class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end mdc-top-app-bar__section-right">
-            <div class="menu-button-container d-none d-md-block">
-                <button class="mdc-button mdc-menu-button">
-                    <i class="mdi mdi-settings"></i>
-                </button>
+            <div id="select_for_fight" class="menu-button-container d-none d-md-block">
+                <h5>
+                    Selected squad: {{ selected_name }}
+                </h5>
             </div>
         </div>
     </div>
 </header>
+{% endverbatim %}

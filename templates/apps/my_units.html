@@ -13,10 +13,10 @@
                     <div style="display: inline-block">
                         <select v-on:change="sort_units" class="form-select" v-model="sort_by">
                             <option>sort by ...</option>
-                            <option>type</option>
-                            <option>name</option>
-                            <option>attack</option>
-                            <option>defence</option>
+                            <option>Type</option>
+                            <option>Name</option>
+                            <option>Attack</option>
+                            <option>Defence</option>
                         </select>
                     </div>
                 </div>
@@ -24,7 +24,7 @@
             <div class="mdc-layout-grid">
                 <div class="mdc-layout-grid__inner">
                     <unit v-for="unit in units"
-                          width="2" v-bind:unit="unit" show_checkbox></unit>
+                          width="2" v-bind:unit="unit" show_detail></unit>
                 </div>
             </div>
         </div>
