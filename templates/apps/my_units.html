@@ -7,6 +7,7 @@
                 <h2 class="card-title mb-0">My Units</h2>
                 <div>
                     <div style="display: inline-block">
+                        <button class="btn btn-warning" v-on:click="select_all()">Select All</button>
                         <button class="btn btn-warning" v-on:click="auction_selected()">Auction Selected</button>
                         <button class="btn btn-warning" v-on:click="squad_selected()">Squad Selected</button>
                     </div>
@@ -14,6 +15,7 @@
                         <select v-on:change="sort_units" class="form-select" v-model="sort_by">
                             <option>sort by ...</option>
                             <option>Type</option>
+                            <option>State</option>
                             <option>Name</option>
                             <option>Attack</option>
                             <option>Defence</option>

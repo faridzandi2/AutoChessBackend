@@ -127,6 +127,10 @@ var select_for_fight_app = new Vue({
         selected_name: "N/A"
     },
     methods: {
+        reset() {
+            this.selected_units = [];
+            this.selected_name = "N/A";
+        }
     }
 });
 
@@ -169,12 +173,11 @@ var connect_app = new Vue({
                     signer_address = address;
                     account_info_app.address = signer_address.substr(0, 15) + "...";
 
-
                     sidebar_app.show_units();
-
 
                     setup_contracts();
                     update_unit_list();
+                    update_battles_app();
                     update_my_squad_list();
                     update_marketplace_app();
                 })
@@ -198,6 +201,11 @@ var my_units_app = new Vue({
         ]
     },
     methods: {
+        select_all() {
+            for (let i = 0; i < this.units.length; i++) {
+                this.units[i].checked = true;
+            }
+        },
         sort_units() {
             this.units = general_sort(this.units, this.sort_by)
         },
@@ -251,7 +259,7 @@ var my_units_app = new Vue({
             data[name] = selected;
             setCookie("my_squads", JSON.stringify(data), 1000)
             update_undeployed_squad_list();
-
+            sidebar_app.show_squads()
         }
     }
 })
@@ -292,7 +300,20 @@ var my_squads_app = new Vue({
             sidebar_app.show_battles();
         },
         random_challenge(squad_name) {
+            let my_squad_cookie = getCookie("my_squads");
+            if (!my_squad_cookie) {
+                my_squad_cookie = "{}"
+            }
+            let data = JSON.parse(my_squad_cookie);
 
+            let units = data[squad_name];
+
+            random_challenge(units, () => {
+                my_squads_app.dissolve_squad(squad_name);
+                update_my_squad_list();
+                update_unit_list();
+                update_battles_app();
+            })
         },
         sort_undeployed_squads(array_name) {
             this.undeployed_squads = general_sort(this.undeployed_squads, this.undeployed_squads_sort_by)
@@ -310,9 +331,13 @@ var battles_app = new Vue({
     el: "#battles",
     data: {
         seen: false,
-        squads: []
+        sort_by: "sort by ...",
+        squads: [],
     },
     methods: {
+        sort_undeployed_squads(array_name) {
+            this.squads = general_sort(this.squads, this.sort_by)
+        },
         challenge(tier_index) {
             let selected = select_for_fight_app.selected_units;
             if (selected.length === 0) {
@@ -321,9 +346,10 @@ var battles_app = new Vue({
             }
             targeted_challenge(selected, tier_index, () => {
                 my_squads_app.dissolve_squad(select_for_fight_app.selected_name)
-                update_my_squad_list()
-                update_unit_list()
-                update_battles_app()
+                select_for_fight_app.reset();
+                update_my_squad_list();
+                update_unit_list();
+                update_battles_app();
             });
 
         }

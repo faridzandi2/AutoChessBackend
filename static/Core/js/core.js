@@ -125,8 +125,8 @@ function update_battles_app() {
         battles_app.message = "select some units. "
         return;
     }
-    get_squads_in_tier(tier).then((squad_lists) => {
-        battles_app.squads = squad_lists;
+    get_squads_in_tier(tier).then((tier_squads) => {
+        battles_app.squads = tier_squads;
     });
 }
 
@@ -182,6 +182,8 @@ function general_sort(array, criteria) {
             return a.defence - b.defence;
         } else if (criteria === "Total Attack") {
             return a.defence - b.defence;
+        } else if (criteria === "State") {
+            return a.state.localeCompare(b.state);
         } else if (criteria === "Stashed Tokens") {
             return a.stashedTokens - b.stashedTokens;
         } else if (criteria === "Unit Count") {

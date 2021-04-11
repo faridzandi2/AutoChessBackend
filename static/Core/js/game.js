@@ -1,5 +1,5 @@
 async function get_provider_address() {
-    return await contract.ProviderAddress();
+    return await contract.CurrencyProvider();
 }
 
 async function get_token_balance() {
@@ -169,12 +169,3 @@ async function buy_unit(type, name, func) {
         func()
     })
 }
-
-
-
-
-
-
-
-
-
