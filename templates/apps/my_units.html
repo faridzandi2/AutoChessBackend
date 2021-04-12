@@ -26,7 +26,7 @@
             <div class="mdc-layout-grid">
                 <div class="mdc-layout-grid__inner">
                     <unit v-for="unit in units"
-                          width="2" v-bind:unit="unit" show_detail></unit>
+                          width="2" v-bind:unit="unit" v-bind:key="unit.unit_index" show_detail></unit>
                 </div>
             </div>
         </div>

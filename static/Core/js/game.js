@@ -31,7 +31,6 @@ async function get_unit_info(unit_index) {
         attack: unit.power,
         curHealth: unit.health,
         level: unit.level,
-        maxHealth: 100, // TODO: fix this!
         utype: m[unit.utype],
         image: m[unit.utype] + ".png",
         state: m2[unit_state],
@@ -52,8 +51,11 @@ async function get_units_info(unit_indices) {
 
 
 async function get_squad_info(squad_index) {
-    let squad = await contract.getSquad(squad_index);
     let m = ["Unused","Retired","TierOne","TierTwo","TierThree","TierFour"]
+
+    let squad = await contract.getSquad(squad_index);
+    let squad_state = await contract.getSquadState(squad_index);
+    let squad_owner = await contract.getSquadOwner(squad_index);
     let unit_infos = await get_units_info(squad.unitIds);
 
     let total_attack = 0;
@@ -63,9 +65,10 @@ async function get_squad_info(squad_index) {
 
     return {
         index: squad_index,
+        owner: squad_owner,
         unitCount: unit_infos.length,
         stashedTokens: squad.stashedTokens,
-        state: m[1], // TODO: fix this
+        state: m[squad_state], // TODO: fix this
         deployTime: squad.deployTime,
         totalAttack: total_attack,
         units: unit_infos,
@@ -109,6 +112,7 @@ async function get_squads_in_tier(tier) {
 
 
 async function targeted_challenge(units, target, func) {
+    console.log(units, target);
     let tx = await contract.targetedChallenge(units, target);
     tx.wait().then(func)
 }

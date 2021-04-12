@@ -76,12 +76,8 @@
                     <h2 class="card-title mb-0">My Auctions</h2>
                     <div>
                         <div style="display: inline-block">
-                            <select v-on:change="sort_squads" class="form-select" v-model="sort_by">
+                            <select v-on:change="sort_my_auctions" class="form-select" v-model="my_auctions_sort_by">
                                 <option>sort by ...</option>
-                                <option>type</option>
-                                <option>name</option>
-                                <option>attack</option>
-                                <option>defence</option>
                             </select>
                         </div>
                     </div>
@@ -94,7 +90,7 @@
                                 <div class="mdc-layout-grid">
                                     <div class="mdc-layout-grid__inner">
                                         <unit v-for="unit in auction.assets"
-                                              width="4" v-bind:unit="unit"></unit>
+                                              width="4" v-bind:unit="unit" v-bind:key="unit.unit_index"></unit>
                                     </div>
                                 </div>
 
@@ -137,12 +133,8 @@
                     <h2 class="card-title mb-0">Available Auctions</h2>
                     <div>
                         <div style="display: inline-block">
-                            <select v-on:change="sort_squads" class="form-select" v-model="sort_by">
+                            <select v-on:change="sort_other_auctions" class="form-select" v-model="other_auctions_sort_by">
                                 <option>sort by ...</option>
-                                <option>type</option>
-                                <option>name</option>
-                                <option>attack</option>
-                                <option>defence</option>
                             </select>
                         </div>
                     </div>
@@ -155,7 +147,7 @@
                                 <div class="mdc-layout-grid">
                                     <div class="mdc-layout-grid__inner">
                                         <unit v-for="unit in auction.assets"
-                                              width="4" v-bind:unit="unit"></unit>
+                                              width="4" v-bind:unit="unit" v-bind:key="unit.unit_index"></unit>
                                     </div>
                                 </div>
 

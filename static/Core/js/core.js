@@ -56,12 +56,12 @@ function update_token_balance() {
 function update_marketplace_app() {
     get_all_auctions().then(function (infos) {
         marketplace_app.my_auctions = []
-        marketplace_app.others_actions = []
+        marketplace_app.other_auctions = []
         for(let a of infos){
             if(a.host === signer_address){
                 marketplace_app.my_auctions.push(s)
             } else {
-                marketplace_app.others_actions.push(s)
+                marketplace_app.other_auctions.push(s)
             }
         }
     })
@@ -81,7 +81,7 @@ function update_my_squad_list() {
         my_squads_app.retired_squads = []
         my_squads_app.deployed_squads = []
         for(let s of squads){
-            if(s.state === "Retired"){
+            if(s.state === "Unused"){
                 my_squads_app.retired_squads.push(s)
             } else {
                 my_squads_app.deployed_squads.push(s)

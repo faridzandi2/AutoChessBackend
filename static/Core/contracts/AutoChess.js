@@ -1,4 +1,4 @@
-const contract_address = "0xD08ebD9E5cCfC3A61813d23f5e73f2272F5167cD"
+const contract_address = "0x7dB444d0E2Da0E513AB3a704FD5EEC444B8FABFd"
 const contract_abi = [
     {
         "inputs": [],
@@ -370,8 +370,46 @@ const contract_abi = [
         "outputs": [
             {
                 "internalType": "uint256[]",
-                "name": "",
+                "name": "squadIds",
                 "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "squadId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getSquadOwner",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "squadId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getSquadState",
+        "outputs": [
+            {
+                "internalType": "enum DeploymentState",
+                "name": "",
+                "type": "uint8"
             }
         ],
         "stateMutability": "view",
@@ -526,25 +564,6 @@ const contract_abi = [
             }
         ],
         "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256[]",
-                "name": "_unitIds",
-                "type": "uint256[]"
-            }
-        ],
-        "name": "randomChallenge",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "squadId",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "nonpayable",
         "type": "function"
     },
     {

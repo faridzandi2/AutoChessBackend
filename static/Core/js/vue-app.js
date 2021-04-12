@@ -294,7 +294,12 @@ var my_squads_app = new Vue({
             }
             let data = JSON.parse(my_squad_cookie);
 
-            select_for_fight_app.selected_units = data[squad_name];
+            let units = data[squad_name]
+            if (get_tier(units) === -1) {
+                alert("wrong number of units!");
+                return
+            }
+            select_for_fight_app.selected_units = units;
             select_for_fight_app.selected_name = squad_name;
 
             sidebar_app.show_battles();
@@ -335,7 +340,7 @@ var battles_app = new Vue({
         squads: [],
     },
     methods: {
-        sort_undeployed_squads(array_name) {
+        sort_squads(array_name) {
             this.squads = general_sort(this.squads, this.sort_by)
         },
         challenge(tier_index) {
@@ -350,6 +355,7 @@ var battles_app = new Vue({
                 update_my_squad_list();
                 update_unit_list();
                 update_battles_app();
+                sidebar_app.show_squads();
             });
 
         }
@@ -361,7 +367,9 @@ var marketplace_app = new Vue({
     data: {
         seen: false,
         my_auctions: [],
-        others_actions: []
+        other_auctions: [],
+        my_auctions_sort_by: "sort by ...",
+        other_auctions_sort_by: "sort by ..."
     },
     methods: {
         buy(type) {
@@ -380,6 +388,12 @@ var marketplace_app = new Vue({
             bid(index, my_bid, function () {
                 update_marketplace_app()
             })
+        },
+        sort_my_auctions() {
+            this.my_auctions = general_sort(this.my_auctions, this.my_auctions_sort_by)
+        },
+        sort_other_auctions() {
+            this.other_auctions = general_sort(this.other_auctions, this.other_auctions_sort_by)
         }
     }
 })

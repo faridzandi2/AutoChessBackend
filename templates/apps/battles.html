@@ -23,7 +23,7 @@
                                 <div class="mdc-layout-grid">
                                     <div class="mdc-layout-grid__inner">
                                         <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
-                                            <button style="width:100%" v-on:click="challenge(squad.tier_index)"
+                                            <button style="width:100%" v-on:click="challenge(squad.index)"
                                                     class="btn btn-primary">Challenge!
                                             </button>
                                         </div>
@@ -34,7 +34,7 @@
                                 <div class="mdc-layout-grid">
                                     <div class="mdc-layout-grid__inner">
                                         <unit v-for="unit in squad.units"
-                                              width="4" v-bind:unit="unit"></unit>
+                                              width="4" v-bind:unit="unit" v-bind:key="unit.unit_index"></unit>
                                     </div>
                                 </div>
 

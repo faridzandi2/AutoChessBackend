@@ -58,7 +58,7 @@
                                 <div class="mdc-layout-grid">
                                     <div class="mdc-layout-grid__inner">
                                         <unit v-for="unit in squad.units"
-                                              width="4" v-bind:unit="unit"></unit>
+                                              width="4" v-bind:unit="unit" v-bind:key="unit.unit_index"></unit>
                                     </div>
                                 </div>
 
@@ -134,14 +134,16 @@
                                 <div class="mdc-layout-grid">
                                     <div class="mdc-layout-grid__inner">
                                         <unit v-for="unit in squad.units"
-                                              width="4" v-bind:unit="unit"></unit>
+                                              width="4" v-bind:unit="unit" v-bind:key="unit.unit_index"></unit>
                                     </div>
                                 </div>
 
-                                <div class="mdc-layout-grid">
-                                    <div class="mdc-layout-grid__inner">
-                                        <div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
-                                            status : {{ squad.state }}
+                                <div class="row">
+                                    <div class="col col-12 text-center">
+                                        <div class="mdc-card" style="padding:5px; background-color:gray">
+                                            <h5>
+                                                {{ squad.state }}
+                                            </h5>
                                         </div>
                                     </div>
                                 </div>
@@ -197,7 +199,7 @@
                                 <div class="mdc-layout-grid">
                                     <div class="mdc-layout-grid__inner">
                                         <unit v-for="unit in squad.units"
-                                              width="4" v-bind:unit="unit"></unit>
+                                              width="4" v-bind:unit="unit" v-bind:key="unit.unit_index"></unit>
                                     </div>
                                 </div>
 
